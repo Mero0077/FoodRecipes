@@ -1,4 +1,6 @@
 
+using Presentation.Middlewares;
+
 namespace Presentation
 {
     public class Program
@@ -12,6 +14,7 @@ namespace Presentation
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            builder.Services.AddScoped<GlobalExceptionHandlerMiddleware>();
 
             var app = builder.Build();
 
@@ -23,6 +26,7 @@ namespace Presentation
 
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
             app.UseAuthorization();
 
 
