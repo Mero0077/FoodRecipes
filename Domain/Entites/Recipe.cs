@@ -30,7 +30,7 @@ namespace Domain.Entites
         public Guid CategoryId { get; set; }
 
         // Navigation properties
-        public virtual Category Category { get; set; }
+        public virtual Category Category { get; set; } = null!;
 
         [MaxLength(250)]
         [Url]

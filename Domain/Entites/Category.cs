@@ -13,6 +13,9 @@ namespace Domain.Entites
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
+
+        // Navigation property for related recipes
+        public ICollection<Recipe> Recipes { get; set; }
     }
 
 }
