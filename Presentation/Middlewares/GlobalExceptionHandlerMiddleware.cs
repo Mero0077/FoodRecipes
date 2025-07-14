@@ -1,9 +1,10 @@
 ﻿
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Hosting;
-using Presentation.Enums.ErrorsCode;
+using Presentation.Enums.ErrorCodes;
 using Presentation.ErrorDTOS;
 using Presentation.Exceptions;
+using Presentation.ViewModels;
 using System;
 using System.Text.Json;
 
@@ -63,7 +64,7 @@ namespace Presentation.Middlewares
                traceId,
                context.Request.Path);
 
-            var response = new ErrorFailResponse<object>(exception.Message, _webHostEnvironment.IsDevelopment() ? traceId : null,ErrorCode.InternalErrorServer );
+            var response = new ErrorFailResponse<object>(exception.Message, _webHostEnvironment.IsDevelopment() ? traceId : null, ErrorCodes.InternalServerError );
 
             await WriteErrorResponseAsync<object>(context, response, traceId, StatusCodes.Status500InternalServerError);
         }
@@ -123,7 +124,7 @@ namespace Presentation.Middlewares
             await WriteErrorResponseAsync<object>(context, response,traceId,StatusCodes.Status403Forbidden);
         }
 
-        private async Task WriteErrorResponseAsync<T>(HttpContext context,ResponseDTO<T> response,string traceId,int statusCode)
+        private async Task WriteErrorResponseAsync<T>(HttpContext context,ResponseViewModel<T> response,string traceId,int statusCode)
         {
             context.Response.StatusCode = statusCode;
             context.Response.ContentType = "application/json";

@@ -1,10 +1,11 @@
-﻿using Presentation.Enums.ErrorsCode;
+﻿using Presentation.Enums.ErrorCodes;
+using Presentation.ViewModels;
 
 namespace Presentation.ErrorDTOS
 {
-    public class ErrorFailResponse<T> : ResponseDTO<T>
+    public class ErrorFailResponse<T> : ResponseViewModel<T>
     {
-        public ErrorFailResponse(string message ,string? traceId,ErrorCode errorCode)
+        public ErrorFailResponse(string message ,string? traceId,ErrorCodes errorCode)
         {
             Message = message;
             TraceId = traceId;

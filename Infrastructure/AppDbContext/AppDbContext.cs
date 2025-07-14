@@ -21,6 +21,7 @@ namespace Infrastructure.AppDbContext
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
     }
-    {
-    }
+    
+    
+    
 }
