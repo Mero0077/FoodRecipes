@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entites
+namespace Domain.Models
 {
-    public class Recipe : BaseEntity
+    public class Recipe : BaseModel
     {
         [Required]
         [MaxLength(100)]

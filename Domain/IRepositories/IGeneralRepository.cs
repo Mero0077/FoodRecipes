@@ -15,7 +15,7 @@ namespace Domain.IRepositories
 
         public  Task<T> GetOneWithTrackingAsync(Expression<Func<T, bool>> expression);
 
-        public  Task<T> GetOneByIdAsync(int Id);
+        public  Task<T> GetOneByIdAsync(Guid Id);
 
         public  Task<T> AddAsync(T entity);
 
@@ -23,9 +23,9 @@ namespace Domain.IRepositories
 
         public  Task UpdateIncludeAsync(T entity, params string[] modifiedProperties);
 
-        public  Task<T> DeleteAsync(int Id);
+        public  Task<T> DeleteAsync(Guid Id);
 
-        public bool IsExists(int Id);
+        public bool IsExists(Guid Id);
 
         public  Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

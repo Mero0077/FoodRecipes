@@ -2,17 +2,18 @@
 using Application.CQRS.Account.Commands;
 using Application.DTOs.User;
 using Domain.IRepositories;
+using Infrastructure.AppDbContext;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
-using Infrastructure.AppDbContext;
-using Microsoft.EntityFrameworkCore;
 using Presentation.Middlewares;
-using System;
 using Presentation.Shared;
+using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 
@@ -24,8 +25,9 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                   .LogTo(log => Debug.WriteLine(log), LogLevel.Information).EnableSensitiveDataLogging(true)
                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                    .UseLazyLoadingProxies());
 

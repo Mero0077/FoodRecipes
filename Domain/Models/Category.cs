@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entites
+namespace Domain.Models
 {
 
-    public class Category : BaseEntity
+    public class Category : BaseModel
     {
         [Required]
         [MaxLength(100)]

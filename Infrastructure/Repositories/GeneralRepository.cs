@@ -1,6 +1,6 @@
 ﻿using Domain.IRepositories;
 using Domain.Models;
-using Infrastructure.Data;
+using Infrastructure.AppDbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -35,7 +35,7 @@ namespace Infrastructure.Repositories
         {
             return await _dbSet.AsTracking().Where(expression).FirstOrDefaultAsync();
         }
-        public async Task<T> GetOneByIdAsync(int Id)
+        public async Task<T> GetOneByIdAsync(Guid Id)
         {
             return await _dbSet.AsTracking().Where(e => e.Id == Id).FirstOrDefaultAsync();
         }
@@ -79,7 +79,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<T> DeleteAsync(int Id)
+        public async Task<T> DeleteAsync(Guid Id)
         {
             var res = await GetOneByIdAsync(Id);
 
@@ -90,7 +90,7 @@ namespace Infrastructure.Repositories
             return res;
         }
 
-        public bool IsExists(int Id)
+        public bool IsExists(Guid Id)
         {
             return GetOneByIdAsync(Id) != null ? true : false;
         }
