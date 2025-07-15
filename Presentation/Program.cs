@@ -8,7 +8,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
+using Infrastructure.AppDbContext;
+using Microsoft.EntityFrameworkCore;
 using Presentation.Middlewares;
+using System;
 using Presentation.Shared;
 using System.Reflection;
 using System.Text;
@@ -20,6 +23,11 @@ namespace Presentation
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                   .UseLazyLoadingProxies());
 
             // Add services to the container.
 

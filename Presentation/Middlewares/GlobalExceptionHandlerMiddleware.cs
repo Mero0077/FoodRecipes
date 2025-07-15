@@ -1,9 +1,9 @@
 ﻿
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Hosting;
-using Presentation.Enums.ErrorsCode;
-using Presentation.ErrorDTOS;
+using Presentation.Enums.ErrorCodes;
 using Presentation.Exceptions;
+using Presentation.ViewModels;
 using System;
 using System.Text.Json;
 
@@ -63,7 +63,7 @@ namespace Presentation.Middlewares
                traceId,
                context.Request.Path);
 
-            var response = new ErrorFailResponse<object>(exception.Message, _webHostEnvironment.IsDevelopment() ? traceId : null,ErrorCode.InternalErrorServer );
+            var response = ResponseViewModel<object>.Failuer(exception.Message, _webHostEnvironment.IsDevelopment() ? traceId : null, ErrorCodes.InternalServerError );
 
             await WriteErrorResponseAsync<object>(context, response, traceId, StatusCodes.Status500InternalServerError);
         }
@@ -75,9 +75,9 @@ namespace Presentation.Middlewares
             _logger.Log(
                 logLevel,
                 exception,
-               $"Application Exception. TraceId: {traceId}, Message: {exception.Message}, ErrorCode: {exception.ErrorCode}, RequestPath: {context.Request.Path}"
+               $"Application Exception. TraceId: {traceId}, Message: {exception.Message}, ErrorCodes: {exception.ErrorCodes}, RequestPath: {context.Request.Path}"
                 );
-            var response = new ErrorFailResponse<object>(exception.Message,_webHostEnvironment.IsDevelopment() ? traceId : null,exception.ErrorCode);
+            var response = ResponseViewModel<object>.Failuer(exception.Message,_webHostEnvironment.IsDevelopment() ? traceId : null,exception.ErrorCodes);
             await WriteErrorResponseAsync(context,response, traceId,StatusCodes.Status400BadRequest);
         }
 
@@ -87,9 +87,9 @@ namespace Presentation.Middlewares
             _logger.Log(
             logLevel,
             execption,
-            $"Application Exception. TraceId: {traceId}, Message: {execption.Message}, ErrorCode: {execption.ErrorCode}, RequestPath: {context.Request.Path}"
+            $"Application Exception. TraceId: {traceId}, Message: {execption.Message}, ErrorCodes: {execption.ErrorCodes}, RequestPath: {context.Request.Path}"
                 );
-            var response = new ErrorFailResponse<object>(execption.Message,_webHostEnvironment.IsDevelopment()?traceId:null,execption.ErrorCode);
+            var response = ResponseViewModel<object>.Failuer(execption.Message,_webHostEnvironment.IsDevelopment()?traceId:null,execption.ErrorCodes);
             await WriteErrorResponseAsync<object>(context, response,traceId,StatusCodes.Status400BadRequest);
         }
 
@@ -102,7 +102,7 @@ namespace Presentation.Middlewares
                exception.Message,
                context.Request.Path);
 
-            var response = new ErrorFailResponse<object>("Access Denied", _webHostEnvironment.IsDevelopment() ? traceId : null ,ErrorCode.UnAuthorized);
+            var response = ResponseViewModel<object>.Failuer("Access Denied", _webHostEnvironment.IsDevelopment() ? traceId : null ,ErrorCodes.UnAuthorized);
 
 
             await WriteErrorResponseAsync<object>(context, response,traceId,StatusCodes.Status403Forbidden);
@@ -116,14 +116,14 @@ namespace Presentation.Middlewares
             _logger.Log(
                 logLevel,
                 exception,
-               $"Application Exception. TraceId: {traceId}, Message: {exception.Message}, ErrorCode: {exception.ErrorCode}, RequestPath: {context.Request.Path}"
+               $"Application Exception. TraceId: {traceId}, Message: {exception.Message}, ErrorCodes: {exception.ErrorCodes}, RequestPath: {context.Request.Path}"
                 );
-            var response = new ErrorFailResponse<object>(exception.Message, _webHostEnvironment.IsDevelopment() ? traceId : null, exception.ErrorCode);
+            var response = ResponseViewModel<object>.Failuer(exception.Message, _webHostEnvironment.IsDevelopment() ? traceId : null, exception.ErrorCodes);
 
             await WriteErrorResponseAsync<object>(context, response,traceId,StatusCodes.Status403Forbidden);
         }
 
-        private async Task WriteErrorResponseAsync<T>(HttpContext context,ResponseDTO<T> response,string traceId,int statusCode)
+        private async Task WriteErrorResponseAsync<T>(HttpContext context,ResponseViewModel<T> response,string traceId,int statusCode)
         {
             context.Response.StatusCode = statusCode;
             context.Response.ContentType = "application/json";
