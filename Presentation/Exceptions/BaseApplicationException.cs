@@ -1,22 +1,22 @@
-﻿using Presentation.Enums.ErrorsCode;
+﻿using Presentation.Enums.ErrorCodes;
 
 namespace Presentation.Exceptions
 {
     public class BaseApplicationException : Exception
     {
         public int HttpStatusCode { get; set; }
-        public ErrorCode ErrorCode { get; set; } 
+        public ErrorCodes ErrorCodes { get; set; } 
 
-        public BaseApplicationException(string message,int httpStatusCode,ErrorCode errorCode) : base(message)
+        public BaseApplicationException(string message,int httpStatusCode, ErrorCodes ErrorCode) : base(message)
         {
             HttpStatusCode = httpStatusCode;
-            ErrorCode = errorCode;
+            ErrorCodes = ErrorCode;
         }
 
-        public BaseApplicationException(string message, int httpStatusCode, ErrorCode errorCode, Exception innerException) : base(message,innerException)
+        public BaseApplicationException(string message, int httpStatusCode, ErrorCodes ErrorCode, Exception innerException) : base(message,innerException)
         {
             HttpStatusCode = httpStatusCode;
-            ErrorCode = errorCode;
+            ErrorCodes = ErrorCode;
         }
 
     }
