@@ -25,9 +25,15 @@ namespace Presentation.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register(UserRegisterVM userRegisterVM)
         {
-            var res= _mediator.Send(new RegisterUserCommand(_mapper.Map<UserRegisterDTO>(userRegisterVM)));
+            var res= await _mediator.Send(new RegisterUserCommand(_mapper.Map<UserRegisterDTO>(userRegisterVM)));
 
             return Ok(_mapper.Map<UserRegisterVM>(res));
+        }
+
+        [HttpPost("Login")]
+        public async Task<string> Login(UserLoginVM userLoginVM)
+        {
+          return await _mediator.Send(new LoginCommand(_mapper.Map<LoginDTO>(userLoginVM)));
         }
     }
 }

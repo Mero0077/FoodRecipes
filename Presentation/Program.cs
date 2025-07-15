@@ -1,5 +1,17 @@
 
+using Application.CQRS.Account.Commands;
+using Application.DTOs.User;
+using Domain.IRepositories;
+using Infrastructure.Data;
+using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualBasic;
 using Presentation.Middlewares;
+using Presentation.Shared;
+using System.Reflection;
+using System.Text;
 
 namespace Presentation
 {
@@ -14,7 +26,48 @@ namespace Presentation
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Services.AddDbContext<ApplicationDbContext>();
+
+            builder.Services.Configure<JWTSettings>( builder.Configuration.GetSection("Jwt"));
+            var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JWTSettings>();
+            var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
+
+            builder.Services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(opt =>
+            {
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                };
+            });
+
+            builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+
             builder.Services.AddScoped<GlobalExceptionHandlerMiddleware>();
+            builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
+
+            builder.Services.AddAutoMapper(
+               typeof(UserProfile).Assembly
+               );
+
+            builder.Services.AddMediatR(c =>c.RegisterServicesFromAssembly(typeof(RegisterUserCommandHandler).Assembly));
+
+
+
 
             var app = builder.Build();
 

@@ -35,10 +35,12 @@ namespace Application.CQRS.Account.Commands
                 throw new ValidationException("User already exists!");
             }
 
-            var user = _mapper.Map<User>(Userexists);
+            var user = _mapper.Map<User>(request.UserRegisterDTO);
             string HashedPass = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.Password = HashedPass;
 
-            await _generalRepository.AddAsync(user);
+           var res= await _generalRepository.AddAsync(user);
+           await _generalRepository.SaveChangesAsync();
 
             return request.UserRegisterDTO;
         }
