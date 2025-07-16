@@ -28,15 +28,16 @@ namespace Infrastructure.AppDbContext
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
-
-
         public DbSet<User> users { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<PasswordReset> PasswordResets { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
 
+        public DbSet<Feature> Features { get; set; }
 
+        public DbSet<RoleFeature > RoleFeatures { get; set; }
 
     }
 }

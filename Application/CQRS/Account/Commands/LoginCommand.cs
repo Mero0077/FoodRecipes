@@ -30,7 +30,7 @@ namespace Application.CQRS.Account.Commands
            var res= await _mediator.Send(new CheckIfUserNameAndPasswordMatchesQuery(request.LoginDTO));
 
            
-           return _jwtTokenGenerator.Generate(2,"omar",Role.Admin);
+           return _jwtTokenGenerator.Generate(2,"omar", Domain.Enums.Role.Admin);
             
 
         }

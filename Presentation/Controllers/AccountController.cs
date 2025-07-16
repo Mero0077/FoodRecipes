@@ -35,6 +35,7 @@ namespace Presentation.Controllers
         {
           return await _mediator.Send(new LoginCommand(_mapper.Map<LoginDTO>(userLoginVM)));
         }
+        [HttpPost]
         public async Task<IActionResult> ForgetPass([FromQuery] string email)
         {
             if (string.IsNullOrWhiteSpace(email))

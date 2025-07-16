@@ -1,8 +1,8 @@
 ﻿
+using Application.Enums.ErrorCodes;
+using Application.Exceptions;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.Extensions.Hosting;
-using Presentation.Enums.ErrorCodes;
-using Presentation.Exceptions;
 using Presentation.ViewModels;
 using System;
 using System.Text.Json;
