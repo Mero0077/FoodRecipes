@@ -36,10 +36,8 @@ namespace Presentation
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
 
-            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-            builder.Services.AddDbContext<ApplicationDbContext>();
 
             builder.Services.Configure<JWTSettings>( builder.Configuration.GetSection("Jwt"));
             var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JWTSettings>();
