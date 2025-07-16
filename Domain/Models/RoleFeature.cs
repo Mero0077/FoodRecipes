@@ -8,10 +8,10 @@ namespace Domain.Models
 {
     public class RoleFeature : BaseModel
     {
-        public Role Role { get; set; }
+        public virtual Role Role { get; set; }
         public Guid RoleID { get; set; }
 
-        public Feature Feature { get; set; }
+        public virtual Feature Feature { get; set; }
 
         public Guid FeatureID { get; set; }
     }

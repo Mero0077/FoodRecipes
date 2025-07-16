@@ -9,6 +9,6 @@ namespace Domain.Models
     public class Role : BaseModel
     {
         public string Name { get; set; }
-        public ICollection<RoleFeature> RoleFeatures { get; set; } = new List<RoleFeature>();
+        public virtual ICollection<RoleFeature> RoleFeatures { get; set; } = new List<RoleFeature>();
     }
 }
