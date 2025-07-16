@@ -1,6 +1,7 @@
-﻿using Presentation.Enums.ErrorCodes;
+﻿using Microsoft.AspNetCore.Http;
+using Application.Enums.ErrorCodes;
 
-namespace Presentation.Exceptions
+namespace Application.Exceptions
 {
     public class ValidationException : BaseApplicationException
     {

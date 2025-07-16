@@ -39,8 +39,6 @@ namespace Infrastructure.Repositories
         {
             return await _dbSet.AsTracking().Where(e => e.Id == Id).FirstOrDefaultAsync();
         }
-
-
         public async Task<T> AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
@@ -97,8 +95,8 @@ namespace Infrastructure.Repositories
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            await _context.SaveChangesAsync(cancellationToken);
-            return await _context.SaveChangesAsync(cancellationToken);
+                await _context.SaveChangesAsync(cancellationToken);
+                return await _context.SaveChangesAsync(cancellationToken);
         }
 
         public async Task<bool> AnyAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)

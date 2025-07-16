@@ -1,0 +1,31 @@
+﻿using Domain.IRepositories;
+using Domain.Models;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.CQRS.Role.Queries
+{
+
+   public record IsRoleExistedQuery(string name) : IRequest<bool>;
+
+    public class IsRoleExistedHandler : IRequestHandler<IsRoleExistedQuery, bool>
+    {
+        private readonly IGeneralRepository<Domain.Models.Role> _roleRepository;
+
+        public IsRoleExistedHandler(IGeneralRepository<Domain.Models.Role> roleRepository) 
+        {
+            this._roleRepository = roleRepository;
+        }
+        public async Task<bool> Handle(IsRoleExistedQuery request, CancellationToken cancellationToken)
+        {
+            var role = await _roleRepository.Get(e=>e.Name.ToLower() == request.name.ToLower()).AnyAsync();
+            return role;
+        }
+    }
+
+}

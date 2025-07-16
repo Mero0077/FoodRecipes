@@ -1,5 +1,6 @@
 
 using Application.CQRS.Account.Commands;
+using Application.CQRS.Account.Shared;
 using Application.DTOs.User;
 using Domain.IRepositories;
 using Infrastructure.AppDbContext;
@@ -12,6 +13,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 using Presentation.Middlewares;
 using Presentation.Shared;
+using Presentation.ViewModels.Roles;
+using Scalar.AspNetCore;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -67,9 +70,12 @@ namespace Presentation
 
             builder.Services.AddScoped<GlobalExceptionHandlerMiddleware>();
             builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
+            builder.Services.AddScoped<UserCredentialsChecker>();
+
 
             builder.Services.AddAutoMapper(
-               typeof(UserProfile).Assembly
+               typeof(UserProfile).Assembly,
+               typeof(RoleProfile).Assembly
                );
 
             builder.Services.AddMediatR(c =>c.RegisterServicesFromAssembly(typeof(RegisterUserCommandHandler).Assembly));
@@ -82,6 +88,7 @@ namespace Presentation
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
+                app.MapScalarApiReference();
                 app.MapOpenApi();
             }
 
@@ -89,7 +96,6 @@ namespace Presentation
 
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

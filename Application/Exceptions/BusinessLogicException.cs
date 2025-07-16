@@ -1,9 +1,11 @@
-﻿using Presentation.Enums.ErrorCodes;
+﻿using Application.Enums.ErrorCodes;
+using Microsoft.AspNetCore.Http;
 
-namespace Presentation.Exceptions
+namespace Application.Exceptions
 {
     public class BusinessLogicException : BaseApplicationException
     {
+
         public BusinessLogicException(string message, int httpStatusCode, ErrorCodes ErrorCode) : base(message, StatusCodes.Status400BadRequest, ErrorCode)
         {
         }
