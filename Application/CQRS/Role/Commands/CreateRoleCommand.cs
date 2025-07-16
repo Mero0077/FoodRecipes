@@ -43,7 +43,7 @@ namespace Application.CQRS.Role.Commands
             if (request.CreateRoleDTO.Name.Length > 30)
                 throw new ValidationException("Role Name Shouldnot be Long",StatusCodes.Status400BadRequest, ErrorCodes.BadRequest);
 
-            if (await _mediator.Send(new IsRoleExistedQuery(request.CreateRoleDTO.Name)))
+            if (await _mediator.Send(new IsRoleNameExistedQuery(request.CreateRoleDTO.Name)))
                 throw new ValidationException("Role is Already Exists", StatusCodes.Status400BadRequest, ErrorCodes.BadRequest);
             var role = _mapper.Map<Domain.Models.Role>(request.CreateRoleDTO);
 

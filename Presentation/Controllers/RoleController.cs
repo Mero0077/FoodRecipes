@@ -38,5 +38,12 @@ namespace Presentation.Controllers
             var result = await _mediator.Send(new CreateRoleCommand(mapped));
             return  ResponseViewModel<Guid>.Success(result);
         }
+
+        [HttpDelete]
+        public async Task<ResponseViewModel<bool>> DeleteRole([FromQuery] Guid id)
+        {
+            var result = await _mediator.Send(new DeleteRoleCommand(id));
+            return ResponseViewModel<bool>.Success(result);
+        }
     }
 }

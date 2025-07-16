@@ -12,7 +12,7 @@ namespace Domain.Models
         public string FeatureName { get; set; }
         public FeatureCode FeatureStatus { get; set; }
 
-        public ICollection<RoleFeature> RoleFeatures { get; set; } = new List<RoleFeature>();
+        public virtual ICollection<RoleFeature> RoleFeatures { get; set; } = new List<RoleFeature>();
 
     }
 }
