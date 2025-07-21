@@ -32,19 +32,19 @@ namespace Application.CQRS.Role.Commands
         {
 
             if (request.CreateRoleDTO == null)
-                throw new ValidationException("The Request Shouldnot be null", StatusCodes.Status400BadRequest,ErrorCodes.BadRequest);
+                throw new ValidationException("The Request Shouldnot be null",ErrorCodes.BadRequest);
 
             if(string.IsNullOrEmpty(request.CreateRoleDTO.Name) || string.IsNullOrWhiteSpace(request.CreateRoleDTO.Name))
-                throw new ValidationException("Nams is NULL", StatusCodes.Status400BadRequest, ErrorCodes.BadRequest);
+                throw new ValidationException("Nams is NULL", ErrorCodes.BadRequest);
 
             request.CreateRoleDTO.Name = request.CreateRoleDTO.Name!.Trim();
 
 
             if (request.CreateRoleDTO.Name.Length > 30)
-                throw new ValidationException("Role Name Shouldnot be Long",StatusCodes.Status400BadRequest, ErrorCodes.BadRequest);
+                throw new ValidationException("Role Name Shouldnot be Long", ErrorCodes.BadRequest);
 
             if (await _mediator.Send(new IsRoleNameExistedQuery(request.CreateRoleDTO.Name)))
-                throw new ValidationException("Role is Already Exists", StatusCodes.Status400BadRequest, ErrorCodes.BadRequest);
+                throw new ValidationException("Role is Already Exists", ErrorCodes.BadRequest);
             var role = _mapper.Map<Domain.Models.Role>(request.CreateRoleDTO);
 
             await _roleRepository.AddAsync(role);

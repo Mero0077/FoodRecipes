@@ -1,7 +1,8 @@
-﻿using Application.CQRS.Account.Commands;
+using Application.CQRS.Account.Commands;
 using Application.CQRS.Account.Shared;
 using Application.DTOs.User;
 using Domain.IRepositories;
+using Hangfire;
 using Infrastructure.AppDbContext;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -35,7 +36,20 @@ namespace Presentation
             // Add services to the container.
             builder.Services.AddControllers();
 
-            // ✅ Add Swagger
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddHangfire(config =>
+            {
+                config.UseSqlServerStorage(connectionString);
+            });
+
+            builder.Services.AddHangfireServer();
+
+            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+            builder.Services.AddOpenApi();
+   
+
+
+    
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -78,7 +92,6 @@ namespace Presentation
 
             var app = builder.Build();
 
-            // ✅ Enable Swagger in dev environment
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -89,7 +102,7 @@ namespace Presentation
 
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
             app.UseAuthorization();
-
+            app.UseHangfireDashboard();
             app.MapControllers();
 
             app.Run();

@@ -31,7 +31,7 @@ namespace Application.CQRS.Role.Commands
         {
            var result = await _mediator.Send( new IsRoleExistedQuery(request.id));
             if(!result)
-                throw new NotFoundException("Role isn't Found",StatusCodes.Status400BadRequest,ErrorCodes.NotFound);
+                throw new NotFoundException("Role isn't Found",ErrorCodes.NotFound);
 
             await _roleRepository.DeleteAsync(request.id);
             await _roleRepository.SaveChangesAsync();

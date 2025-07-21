@@ -27,6 +27,7 @@ namespace Application.CQRS.Account.Commands
         }
         public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
+
            var res= await _mediator.Send(new CheckIfUserNameAndPasswordMatchesQuery(request.LoginDTO));
 
            
