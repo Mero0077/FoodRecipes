@@ -3,6 +3,7 @@ using Application.CQRS.Account.Commands;
 using Application.CQRS.Account.Shared;
 using Application.DTOs.User;
 using Domain.IRepositories;
+using Hangfire;
 using Infrastructure.AppDbContext;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
@@ -37,6 +38,15 @@ namespace Presentation
             // Add services to the container.
 
             builder.Services.AddControllers();
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddHangfire(config =>
+            {
+                config.UseSqlServerStorage(connectionString);
+            });
+
+            builder.Services.AddHangfireServer();
+
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
@@ -96,7 +106,7 @@ namespace Presentation
 
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
             app.UseAuthorization();
-
+            app.UseHangfireDashboard();
             app.MapControllers();
 
             app.Run();

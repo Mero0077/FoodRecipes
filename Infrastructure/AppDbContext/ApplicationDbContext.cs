@@ -39,5 +39,8 @@ namespace Infrastructure.AppDbContext
 
         public DbSet<RoleFeature > RoleFeatures { get; set; }
 
+        public DbSet<WishList> wishLists { get; set; }
+        public DbSet<WishListRecipe> WishListsRecipes { get;set; }
+
     }
 }

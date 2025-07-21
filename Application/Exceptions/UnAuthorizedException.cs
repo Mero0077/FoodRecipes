@@ -5,11 +5,11 @@ namespace Application.Exceptions
 {
     public class UnAuthorizedException : BaseApplicationException
     {
-        public UnAuthorizedException(string message, int httpStatusCode, ErrorCodes ErrorCode) : base(message, StatusCodes.Status203NonAuthoritative, ErrorCode)
+        public UnAuthorizedException(string message, ErrorCodes ErrorCode) : base(message, StatusCodes.Status401Unauthorized, ErrorCode)
         {
         }
 
-        public UnAuthorizedException(string message, int httpStatusCode, ErrorCodes ErrorCode, Exception innerException) : base(message, StatusCodes.Status203NonAuthoritative, ErrorCode, innerException)
+        public UnAuthorizedException(string message, ErrorCodes ErrorCode, Exception innerException) : base(message, StatusCodes.Status401Unauthorized, ErrorCode, innerException)
         {
         }
     }
