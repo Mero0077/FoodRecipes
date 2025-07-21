@@ -39,7 +39,7 @@ namespace Presentation
 
             //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            builder.Services.AddDbContext<ApplicationDbContext>();
+            //builder.Services.AddDbContext<ApplicationDbContext>();
 
             builder.Services.Configure<JWTSettings>( builder.Configuration.GetSection("Jwt"));
             var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JWTSettings>();
