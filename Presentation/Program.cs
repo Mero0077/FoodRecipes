@@ -1,4 +1,3 @@
-
 using Application.CQRS.Account.Commands;
 using Application.CQRS.Account.Shared;
 using Application.DTOs.User;
@@ -11,11 +10,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
 using Presentation.Middlewares;
 using Presentation.Shared;
 using Presentation.ViewModels.Roles;
-using Scalar.AspNetCore;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -30,13 +27,13 @@ namespace Presentation
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-                   .LogTo(log => Debug.WriteLine(log), LogLevel.Information).EnableSensitiveDataLogging(true)
-                   .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                   .UseLazyLoadingProxies());
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+                    .LogTo(log => Debug.WriteLine(log), LogLevel.Information)
+                    .EnableSensitiveDataLogging(true)
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                    .UseLazyLoadingProxies());
 
             // Add services to the container.
-
             builder.Services.AddControllers();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -49,10 +46,16 @@ namespace Presentation
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+   
+
+
+    
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
             builder.Services.AddScoped<IEmailSender, EmailSender>();
 
-
-            builder.Services.Configure<JWTSettings>( builder.Configuration.GetSection("Jwt"));
+            builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("Jwt"));
             var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JWTSettings>();
             var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
 
@@ -68,7 +71,6 @@ namespace Presentation
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidIssuer = jwtSettings.Issuer,
                     ValidAudience = jwtSettings.Audience,
-
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
@@ -77,29 +79,23 @@ namespace Presentation
             });
 
             builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-
             builder.Services.AddScoped<GlobalExceptionHandlerMiddleware>();
             builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
             builder.Services.AddScoped<UserCredentialsChecker>();
 
-
             builder.Services.AddAutoMapper(
-               typeof(UserProfile).Assembly,
-               typeof(RoleProfile).Assembly
-               );
+                typeof(UserProfile).Assembly,
+                typeof(RoleProfile).Assembly);
 
-            builder.Services.AddMediatR(c =>c.RegisterServicesFromAssembly(typeof(RegisterUserCommandHandler).Assembly));
-
-
-
+            builder.Services.AddMediatR(c =>
+                c.RegisterServicesFromAssembly(typeof(RegisterUserCommandHandler).Assembly));
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.MapScalarApiReference();
-                app.MapOpenApi();
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
