@@ -9,6 +9,6 @@ namespace Domain.IRepositories
 {
     public interface IJwtTokenGenerator
     {
-        string Generate(int userId, string name, Role role);
+        string Generate(Guid userId, string name, List<string> roles);
     }
 }

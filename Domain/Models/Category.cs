@@ -15,7 +15,7 @@ namespace Domain.Models
         public string Name { get; set; }
 
         // Navigation property for related recipes
-        public ICollection<Recipe> Recipes { get; set; }
+        public virtual ICollection<Recipe> Recipes { get; set; }
     }
 
 }

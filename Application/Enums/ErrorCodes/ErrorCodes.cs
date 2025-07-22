@@ -1,4 +1,4 @@
-﻿namespace Presentation.Enums.ErrorCodes
+﻿namespace Application.Enums.ErrorCodes
 {
     public enum ErrorCodes
     {
