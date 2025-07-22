@@ -57,7 +57,6 @@ namespace Presentation
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidIssuer = jwtSettings.Issuer,
                     ValidAudience = jwtSettings.Audience,
-
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
@@ -75,6 +74,8 @@ namespace Presentation
                );
 
             builder.Services.AddMediatR(c =>c.RegisterServicesFromAssembly(typeof(RegisterUserCommandHandler).Assembly));
+            builder.Services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(ResetPasswordCommandHandler).Assembly));
+
 
 
 
