@@ -19,12 +19,19 @@ namespace Application.CQRS.WishList.Queries
         }
         public Task<Guid> Handle(IsUserExistsQuery request, CancellationToken cancellationToken)
         {
-            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier);
-            if (userIdClaim == null)
-                throw new UnauthorizedAccessException("User ID not found in token");
-            var userId = Guid.Parse(userIdClaim.Value);
+            var userIdClaim = _httpContextAccessor.HttpContext?.User?.FindFirst("ID");
+            try
+            {
+                if (userIdClaim == null)
+                    throw new UnauthorizedAccessException("User ID not found in token");
+                var userId = Guid.Parse(userIdClaim.Value);
 
-            return Task.FromResult(userId);
+                return Task.FromResult(userId);
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

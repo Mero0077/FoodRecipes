@@ -25,7 +25,7 @@ namespace Domain.IRepositories
 
         public  Task<T> DeleteAsync(Guid Id);
 
-        public bool IsExists(Guid Id);
+        public Task<bool> IsExists(Guid Id);
 
         public  Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

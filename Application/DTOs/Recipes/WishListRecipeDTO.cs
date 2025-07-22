@@ -11,6 +11,5 @@ namespace Application.DTOs.Recipes
     {
         public Guid WishListId { get; set; }
         public Guid RecipeId { get; set; }
-        public Guid UserId { get; set; }
     }
 }

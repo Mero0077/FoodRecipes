@@ -15,8 +15,8 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.WishList.Orchestrator
 {
-    public record AddRecipeToWishlistCommand(WishListRecipeDTO wishListRecipeDTO): IRequest<bool>;
-    public class AddRecipeToWishlistCommandHandler : IRequestHandler<AddRecipeToWishlistCommand, bool>
+    public record AddRecipeToWishlistCommand(WishListRecipeDTO wishListRecipeDTO): IRequest<WishListRecipe>;
+    public class AddRecipeToWishlistCommandHandler : IRequestHandler<AddRecipeToWishlistCommand, WishListRecipe>
     {
         private IGeneralRepository<WishListRecipe> GeneralRepository { get; }
         private IMediator mediator;
@@ -26,12 +26,12 @@ namespace Application.CQRS.WishList.Orchestrator
             this.mediator = mediator;
         }
 
-        public async Task<bool> Handle(AddRecipeToWishlistCommand request, CancellationToken cancellationToken)
+        public async Task<WishListRecipe> Handle(AddRecipeToWishlistCommand request, CancellationToken cancellationToken)
         {
            
             var userId = await mediator.Send(new IsUserExistsQuery());
 
-            var wishListId = await mediator.Send(new IsWishListExistsQuery());
+            var wishList = await mediator.Send(new IsWishListExistsQuery());
 
             await mediator.Send(new IsRecipeExistsQuery(request.wishListRecipeDTO.RecipeId));
 
@@ -45,11 +45,12 @@ namespace Application.CQRS.WishList.Orchestrator
             var entity = new WishListRecipe
             {
                 RecipeId = request.wishListRecipeDTO.RecipeId,
-                WishListId = wishListId.Value
+                WishListId = wishList.Id
             };
 
             await GeneralRepository.AddAsync(entity);
-            return true;
+            await GeneralRepository.SaveChangesAsync();
+            return entity;
         }
     }
 }

@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.Account.Queries
 {
-    public record CheckIfUserNameAndPasswordMatchesQuery(LoginDTO LoginDTO):IRequest<bool>;
+    public record CheckIfUserNameAndPasswordMatchesQuery(LoginDTO LoginDTO):IRequest<User>;
 
-    public class CheckIfUserNameAndPasswordMatchesQueryHandler : IRequestHandler<CheckIfUserNameAndPasswordMatchesQuery, bool>
+    public class CheckIfUserNameAndPasswordMatchesQueryHandler : IRequestHandler<CheckIfUserNameAndPasswordMatchesQuery, User>
     {
         private IMediator _mediator;
         private readonly IGeneralRepository<User> _generalRepository;
@@ -23,14 +23,14 @@ namespace Application.CQRS.Account.Queries
             _mediator = mediator;
             _generalRepository = generalRepository;
         }
-        public async Task<bool> Handle(CheckIfUserNameAndPasswordMatchesQuery request, CancellationToken cancellationToken)
+        public async Task<User> Handle(CheckIfUserNameAndPasswordMatchesQuery request, CancellationToken cancellationToken)
         {
 
             var user = await _generalRepository.GetOneWithTrackingAsync(e => e.UserName == request.LoginDTO.UserName);
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.LoginDTO.Password,user.Password))
                 throw new UnauthorizedAccessException("Invalid Username or Pass!");
 
-            return false;
+            return user;
             
         }
     }

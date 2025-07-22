@@ -88,9 +88,9 @@ namespace Infrastructure.Repositories
             return res;
         }
 
-        public bool IsExists(Guid Id)
+        public async Task<bool> IsExists(Guid Id)
         {
-            return GetOneByIdAsync(Id) != null ? true : false;
+            return await GetOneByIdAsync(Id) != null ? true : false;
         }
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
