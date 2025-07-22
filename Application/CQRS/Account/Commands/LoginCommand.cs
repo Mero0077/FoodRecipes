@@ -4,6 +4,7 @@ using Domain.Enums;
 using Domain.IRepositories;
 using Domain.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,21 +19,22 @@ namespace Application.CQRS.Account.Commands
     {
         private readonly IMediator _mediator;
         private readonly IGeneralRepository<User> _generalRepository;
+        private readonly IGeneralRepository<Domain.Models.UserRole> _UserRoleRepository;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        public LoginCommandHandler(IMediator mediator,IGeneralRepository<User> generalRepository,IJwtTokenGenerator jwtTokenGenerator)
+        public LoginCommandHandler(IMediator mediator,IGeneralRepository<User> generalRepository,IJwtTokenGenerator jwtTokenGenerator, IGeneralRepository<Domain.Models.UserRole> RoleRepository)
         {
             _mediator = mediator;
             _generalRepository = generalRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
+            _UserRoleRepository = RoleRepository;
         }
         public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
 
            var res= await _mediator.Send(new CheckIfUserNameAndPasswordMatchesQuery(request.LoginDTO));
-
+           var roles = await _UserRoleRepository.Get(e => e.UserId == res.Id).Select(e=>e.Role.Name).ToListAsync();
+           return _jwtTokenGenerator.Generate(res.Id,res.FirstName, roles);
            
-           return _jwtTokenGenerator.Generate(2,"omar", Domain.Enums.Role.Admin);
-            
 
         }
     }

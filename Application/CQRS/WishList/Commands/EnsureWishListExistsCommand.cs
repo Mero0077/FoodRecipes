@@ -1,6 +1,7 @@
 ﻿using Application.CQRS.WishList.Queries;
 using Application.DTOs.Recipes;
 using Domain.IRepositories;
+using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -12,9 +13,9 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.WishList.Commands
 {
-    public record EnsureWishListExistsCommand() : IRequest<Guid>;
+    public record EnsureWishListExistsCommand() : IRequest<Domain.Models.WishList>;
 
-    public class EnsureWishListExistsCommandHandler : IRequestHandler<EnsureWishListExistsCommand, Guid>
+    public class EnsureWishListExistsCommandHandler : IRequestHandler<EnsureWishListExistsCommand, Domain.Models.WishList>
     {
         private readonly IGeneralRepository<Domain.Models.WishList> wishListRepo;
         private IMediator mediator;
@@ -24,12 +25,12 @@ namespace Application.CQRS.WishList.Commands
             this.mediator = mediator;
         }
 
-        public async Task<Guid> Handle(EnsureWishListExistsCommand request, CancellationToken cancellationToken)
+        public async Task<Domain.Models.WishList> Handle(EnsureWishListExistsCommand request, CancellationToken cancellationToken)
         {
-            var existingWishListId = await mediator.Send(new IsWishListExistsQuery());
+            var existingWishList = await mediator.Send(new IsWishListExistsQuery());
 
-            if (existingWishListId.HasValue)
-                return existingWishListId.Value;
+            if (existingWishList!=null)
+                return existingWishList;
 
             var userId = mediator.Send(new IsUserExistsQuery());
 
@@ -39,7 +40,9 @@ namespace Application.CQRS.WishList.Commands
             };
 
             await wishListRepo.AddAsync(newWishList);
-            return newWishList.Id;
+            await wishListRepo.SaveChangesAsync();
+            return newWishList;
+
         }
     }
 

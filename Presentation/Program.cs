@@ -1,5 +1,7 @@
 using Application.CQRS.Account.Commands;
+using Application.CQRS.Account.Queries;
 using Application.CQRS.Account.Shared;
+using Application.CQRS.WishList.Queries;
 using Application.DTOs.User;
 using Domain.IRepositories;
 using Hangfire;
@@ -10,8 +12,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Presentation.Controllers;
 using Presentation.Middlewares;
 using Presentation.Shared;
+using Presentation.ViewModels.RecipeWishList;
 using Presentation.ViewModels.Roles;
 using System;
 using System.Diagnostics;
@@ -77,6 +81,7 @@ namespace Presentation
                     ValidateIssuerSigningKey = true,
                 };
             });
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             builder.Services.AddScoped<GlobalExceptionHandlerMiddleware>();
@@ -85,10 +90,13 @@ namespace Presentation
 
             builder.Services.AddAutoMapper(
                 typeof(UserProfile).Assembly,
-                typeof(RoleProfile).Assembly);
+                typeof(RoleProfile).Assembly,
+                typeof(RecipeWisListProfile).Assembly,
+                typeof(WishListProfile).Assembly);
 
-            builder.Services.AddMediatR(c =>
-                c.RegisterServicesFromAssembly(typeof(RegisterUserCommandHandler).Assembly));
+           
+            builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(IsWishListExistsQueryHandler).Assembly));
+
 
             var app = builder.Build();
 

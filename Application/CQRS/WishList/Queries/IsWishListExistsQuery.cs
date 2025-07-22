@@ -16,8 +16,8 @@ using System.Threading.Tasks;
 namespace Application.CQRS.WishList.Queries
 {
 
-    public record IsWishListExistsQuery() : IRequest<Guid?>;
-    public class IsWishListExistsQueryHandler : IRequestHandler<IsWishListExistsQuery, Guid?>
+    public record IsWishListExistsQuery() : IRequest<Domain.Models.WishList>;
+    public class IsWishListExistsQueryHandler : IRequestHandler<IsWishListExistsQuery, Domain.Models.WishList>
     {
         private readonly IGeneralRepository<Domain.Models.WishList> _wishListRepo;
         
@@ -29,11 +29,11 @@ namespace Application.CQRS.WishList.Queries
             _mediator = mediator;
         }
 
-        public async Task<Guid?> Handle(IsWishListExistsQuery request, CancellationToken cancellationToken)
+        public async Task<Domain.Models.WishList> Handle(IsWishListExistsQuery request, CancellationToken cancellationToken)
         {
             var userId = await _mediator.Send(new IsUserExistsQuery());
             var wishlist = await _wishListRepo.Get(e => e.UserId == userId).FirstOrDefaultAsync();
-            return wishlist?.Id;
+            return wishlist;
         }
     }
 }
