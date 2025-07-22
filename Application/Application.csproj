@@ -29,4 +29,8 @@
     <Folder Include="CQRS\Recipe\Queries\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CQRS\Feature\" />
+  </ItemGroup>
+
 </Project>

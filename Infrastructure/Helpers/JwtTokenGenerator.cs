@@ -23,18 +23,24 @@ namespace Infrastructure.Data
             _settings = options.Value;
         }
 
-        public string Generate(int userId, string name, Role role)
+        public string Generate(Guid userId, string name, List<string> roles)
         {
             var key = Encoding.ASCII.GetBytes(_settings.SecretKey);
             var tokenHandler = new JwtSecurityTokenHandler();
+            var claims = new List<Claim>
+             {
+                new Claim("ID", userId.ToString()),
+                new Claim(ClaimTypes.Name, name)
+             };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("ID", userId.ToString()),
-                    new Claim(ClaimTypes.Name, name),
-                    new Claim(ClaimTypes.Role, ((int)role).ToString())
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(2),
                 NotBefore = DateTime.UtcNow,
                 Issuer = _settings.Issuer,
@@ -47,6 +53,8 @@ namespace Infrastructure.Data
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+       
     }
 }
 

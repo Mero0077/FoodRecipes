@@ -1,4 +1,4 @@
-﻿using Presentation.Enums.ErrorCodes;
+﻿using Application.Enums.ErrorCodes;
 
 namespace Presentation.ViewModels
 {
