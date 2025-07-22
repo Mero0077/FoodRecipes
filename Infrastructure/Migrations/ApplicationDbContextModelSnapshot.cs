@@ -50,7 +50,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Feature", b =>
@@ -80,7 +80,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Features");
+                    b.ToTable("Features", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.PasswordReset", b =>
@@ -115,7 +115,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PasswordResets");
+                    b.ToTable("PasswordResets", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Recipe", b =>
@@ -165,7 +165,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.Role", b =>
@@ -192,7 +192,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.RoleFeature", b =>
@@ -225,7 +225,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoleID");
 
-                    b.ToTable("RoleFeatures");
+                    b.ToTable("RoleFeatures", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
@@ -274,7 +274,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.UserRole", b =>
@@ -307,7 +307,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRole", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.WishList", b =>
@@ -336,7 +336,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("wishLists");
+                    b.ToTable("wishLists", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.WishListRecipe", b =>
@@ -369,7 +369,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("WishListId");
 
-                    b.ToTable("WishListsRecipes");
+                    b.ToTable("WishListsRecipes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Models.PasswordReset", b =>

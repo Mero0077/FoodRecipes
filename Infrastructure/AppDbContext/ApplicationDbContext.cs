@@ -19,13 +19,13 @@ namespace Infrastructure.AppDbContext
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=.;Database=FoodRecipesDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer("Server=.;Database=FoodRecipesDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True");
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
