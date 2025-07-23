@@ -9,7 +9,12 @@ namespace Domain.Models
     public class Role : BaseModel
     {
         public string Name { get; set; }
+<<<<<<< Updated upstream
         public virtual ICollection<UserRole> userRoles { get; set; }
+=======
+
+        public virtual ICollection<User> Users { get; set; } = new List<User>();    
+>>>>>>> Stashed changes
         public virtual ICollection<RoleFeature> RoleFeatures { get; set; } = new List<RoleFeature>();
     }
 }

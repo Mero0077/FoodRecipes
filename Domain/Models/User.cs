@@ -16,8 +16,13 @@ namespace Domain.Models
         public string PhoneNumber { get; set; }
         public string Country { get; set; }
         public string UserName { get; set; }
+<<<<<<< Updated upstream
 
         public virtual ICollection<UserRole> userRoles { get; set; }
         public virtual WishList wishList { get; set; }
+=======
+        public virtual Role Role { get; set; }
+        public Guid RoleId { get; set; }
+>>>>>>> Stashed changes
     }
 }
