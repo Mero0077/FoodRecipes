@@ -50,7 +50,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Domain.Models.Feature", b =>
@@ -67,7 +67,29 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Features", (string)null);
+                    b.ToTable("Features");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FeatureName = "GetAllRoles"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FeatureName = "DeleteRole"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FeatureName = "UpdateRole"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FeatureName = "CreateRole"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Models.PasswordReset", b =>
@@ -102,7 +124,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("PasswordResets", (string)null);
+                    b.ToTable("PasswordResets");
                 });
 
             modelBuilder.Entity("Domain.Models.Recipe", b =>
@@ -152,7 +174,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Recipes", (string)null);
+                    b.ToTable("Recipes");
                 });
 
             modelBuilder.Entity("Domain.Models.Role", b =>
@@ -179,7 +201,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Domain.Models.RoleFeature", b =>
@@ -212,7 +234,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("RoleID");
 
-                    b.ToTable("RoleFeatures", (string)null);
+                    b.ToTable("RoleFeatures");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
@@ -264,7 +286,9 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users", (string)null);
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("Domain.Models.UserRole", b =>
@@ -297,7 +321,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRole", (string)null);
+                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("Domain.Models.WishList", b =>
@@ -326,7 +350,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("wishLists", (string)null);
+                    b.ToTable("wishLists");
                 });
 
             modelBuilder.Entity("Domain.Models.WishListRecipe", b =>
@@ -359,7 +383,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("WishListId");
 
-                    b.ToTable("WishListsRecipes", (string)null);
+                    b.ToTable("WishListsRecipes");
                 });
 
             modelBuilder.Entity("Domain.Models.PasswordReset", b =>
@@ -403,16 +427,27 @@ namespace Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Domain.Models.User", b =>
+                {
+                    b.HasOne("Domain.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("Domain.Models.UserRole", b =>
                 {
                     b.HasOne("Domain.Models.Role", "Role")
-                        .WithMany("userRoles")
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Models.User", "User")
-                        .WithMany("userRoles")
+                        .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -471,12 +506,12 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("RoleFeatures");
 
-                    b.Navigation("userRoles");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
                 {
-                    b.Navigation("userRoles");
+                    b.Navigation("UserRoles");
 
                     b.Navigation("wishList")
                         .IsRequired();
