@@ -13,6 +13,6 @@ namespace Domain.Models
 
         public virtual Feature Feature { get; set; }
 
-        public Guid FeatureID { get; set; }
+        public int FeatureID { get; set; }
     }
 }

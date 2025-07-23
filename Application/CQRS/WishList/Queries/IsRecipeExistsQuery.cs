@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.WishList.Queries
 {
-    public record IsRecipeExistsQuery(Guid RecipeId):IRequest;
+    public record IsRecipeExistsQuery(Guid RecipeId) : IRequest;
 
     public class IsRecipeExistsQueryHandler : IRequestHandler<IsRecipeExistsQuery>
     {
-        private IGeneralRepository<Recipe> _Reciperepository;
+        private IGeneralRepository<Domain.Models.Recipe> _Reciperepository;
 
-        public IsRecipeExistsQueryHandler(IGeneralRepository<Recipe> Reciperepository)
+        public IsRecipeExistsQueryHandler(IGeneralRepository<Domain.Models.Recipe> Reciperepository)
         {
             _Reciperepository = Reciperepository;
         }
@@ -26,9 +26,9 @@ namespace Application.CQRS.WishList.Queries
         {
             var exists = await _Reciperepository.GetOneByIdAsync(request.RecipeId);
 
-            if (exists==null)
+            if (exists == null)
                 throw new NotFoundException("Recipe not found!", ErrorCodes.NotFound);
 
         }
     }
- }
+}

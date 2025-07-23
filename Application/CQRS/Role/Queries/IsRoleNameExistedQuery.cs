@@ -23,8 +23,9 @@ namespace Application.CQRS.Role.Queries
         }
         public async Task<bool> Handle(IsRoleNameExistedQuery request, CancellationToken cancellationToken)
         {
-            var role = await _roleRepository.Get(e=>e.Name.ToLower() == request.name.ToLower()).AnyAsync();
-            return role;
+            var trimmedName = request.name.Trim();
+            var result = await _roleRepository.Get(e=>e.Name.ToLower() == trimmedName.ToLower()).AnyAsync();
+            return result;
         }
     }
 

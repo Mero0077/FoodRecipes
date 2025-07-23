@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250721145727_AdduserRoleTable")]
-    partial class AdduserRoleTable
+    [Migration("20250723153254_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,32 +58,41 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.Feature", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("FeatureName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FeatureStatus")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
                     b.ToTable("Features");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            FeatureName = "GetAllRoles"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            FeatureName = "DeleteRole"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            FeatureName = "UpdateRole"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            FeatureName = "CreateRole"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Models.PasswordReset", b =>
@@ -210,8 +219,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("FeatureID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("FeatureID")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -268,6 +277,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -276,6 +288,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
 
                     b.ToTable("users");
                 });
@@ -310,7 +324,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserRoles");
+                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("Domain.Models.WishList", b =>
@@ -416,16 +430,27 @@ namespace Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Domain.Models.User", b =>
+                {
+                    b.HasOne("Domain.Models.Role", "Role")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("Domain.Models.UserRole", b =>
                 {
                     b.HasOne("Domain.Models.Role", "Role")
-                        .WithMany("userRoles")
+                        .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Models.User", "User")
-                        .WithMany("userRoles")
+                        .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -484,12 +509,12 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("RoleFeatures");
 
-                    b.Navigation("userRoles");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>
                 {
-                    b.Navigation("userRoles");
+                    b.Navigation("UserRoles");
 
                     b.Navigation("wishList")
                         .IsRequired();
