@@ -15,7 +15,9 @@ using Microsoft.IdentityModel.Tokens;
 using Presentation.Controllers;
 using Presentation.Middlewares;
 using Presentation.Shared;
+using Presentation.ViewModels.Feature;
 using Presentation.ViewModels.RecipeWishList;
+using Presentation.ViewModels.RoleFeature;
 using Presentation.ViewModels.Roles;
 using System;
 using System.Diagnostics;
@@ -91,6 +93,8 @@ namespace Presentation
             builder.Services.AddAutoMapper(
                 typeof(UserProfile).Assembly,
                 typeof(RoleProfile).Assembly,
+                typeof(FeatureProfile).Assembly,
+                typeof(RoleFeatureProfile).Assembly,
                 typeof(RecipeWisListProfile).Assembly,
                 typeof(WishListProfile).Assembly);
 

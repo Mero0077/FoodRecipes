@@ -1,5 +1,4 @@
-﻿using Domain.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +8,6 @@ namespace Domain.IRepositories
 {
     public interface IJwtTokenGenerator
     {
-        string Generate(Guid userId, string name, List<string> roles);
+        string Generate(Guid userId, string name, Domain.Models.Role role);
     }
 }

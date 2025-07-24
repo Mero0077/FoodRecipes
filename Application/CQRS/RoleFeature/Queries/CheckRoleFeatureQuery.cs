@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.RoleFeature.Queries
 {
-    public record CheckRoleFeatureQuery( int featureId, Guid roleId):IRequest<bool>;
+    public record CheckRoleFeatureQuery(Guid featureId, Guid roleId) : IRequest<bool>;
     public class CheckRoleFeatureQueryHandler : IRequestHandler<CheckRoleFeatureQuery, bool>
     {
         private readonly IGeneralRepository<Domain.Models.RoleFeature> _roleFeatureRepository;
@@ -20,9 +20,9 @@ namespace Application.CQRS.RoleFeature.Queries
         {
             this._roleFeatureRepository = roleFeatureRepository;
         }
-       public async Task<bool> Handle(CheckRoleFeatureQuery request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(CheckRoleFeatureQuery request, CancellationToken cancellationToken)
         {
-            return await _roleFeatureRepository.GetAll().AnyAsync(e => e.RoleID == request.roleId && e.FeatureID ==request.featureId);
+            return await _roleFeatureRepository.GetAll().AnyAsync(e => e.RoleID == request.roleId && e.FeatureID == request.featureId);
         }
     }
 }

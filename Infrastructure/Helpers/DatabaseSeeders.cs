@@ -14,10 +14,17 @@ namespace Infrastructure.Helpers
         public static void SeedFeatureData(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Feature>().HasData(
-                new Feature() { Id = (int)FeatureCode.GetAllRoles, FeatureName = "GetAllRoles" },
-                new Feature() { Id = (int)FeatureCode.DeleteRole, FeatureName = "DeleteRole" },
-                new Feature() { Id = (int)FeatureCode.UpdateRole, FeatureName = "UpdateRole" },
-                new Feature() { Id = (int)FeatureCode.CreateRole, FeatureName = "CreateRole" }
+                new Feature() {Id=new Guid(Constants.GetAllRolesFeature) ,FeatureName = FeatureCode.GetAllRoles.ToString(),CreatedAt=null },
+                new Feature() {Id=new Guid(Constants.DeleteRoleFeature) ,FeatureName = FeatureCode.DeleteRole.ToString(),CreatedAt=null },
+                new Feature() {Id=new Guid(Constants.UpdateRoleFeature) ,FeatureName = FeatureCode.UpdateRole.ToString(),CreatedAt = null },
+                new Feature() {Id=new Guid(Constants.CreateRoleFeature) ,FeatureName = FeatureCode.CreateRole.ToString(),CreatedAt = null }
+            );
+        }
+
+        public static void SeedNoneRole(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Domain.Models.Role>().HasData(
+                new Domain.Models.Role() { Id=new Guid(Constants.NoneRole) ,Name="None",CreatedAt=null}
             );
         }
     }
