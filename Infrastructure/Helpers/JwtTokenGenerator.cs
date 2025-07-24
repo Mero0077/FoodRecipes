@@ -1,5 +1,6 @@
 ﻿using Domain.Enums;
 using Domain.IRepositories;
+using Domain.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public class JwtTokenGenerator: IJwtTokenGenerator
+    public class JwtTokenGenerator : IJwtTokenGenerator
     {
         private readonly JWTSettings _settings;
 
@@ -23,20 +24,18 @@ namespace Infrastructure.Data
             _settings = options.Value;
         }
 
-        public string Generate(Guid userId, string name, List<string> roles)
+        public string Generate(Guid userId, string name, Domain.Models.Role role)
         {
             var key = Encoding.ASCII.GetBytes(_settings.SecretKey);
             var tokenHandler = new JwtSecurityTokenHandler();
             var claims = new List<Claim>
              {
                 new Claim("ID", userId.ToString()),
-                new Claim(ClaimTypes.Name, name)
+                new Claim(ClaimTypes.Role,role.Id.ToString()),
+                new Claim(ClaimTypes.Name, name),
              };
 
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+           
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

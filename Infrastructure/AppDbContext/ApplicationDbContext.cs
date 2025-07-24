@@ -32,6 +32,7 @@ namespace Infrastructure.AppDbContext
         {
             base.OnModelCreating(modelBuilder);
             DatabaseSeeders.SeedFeatureData(modelBuilder);
+            DatabaseSeeders.SeedNoneRole(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
         public DbSet<User> users { get; set; }
@@ -43,10 +44,10 @@ namespace Infrastructure.AppDbContext
 
         public DbSet<Feature> Features { get; set; }
 
-        public DbSet<RoleFeature > RoleFeatures { get; set; }
+        public DbSet<RoleFeature> RoleFeatures { get; set; }
 
         public DbSet<WishList> wishLists { get; set; }
-        public DbSet<WishListRecipe> WishListsRecipes { get;set; }
+        public DbSet<WishListRecipe> WishListsRecipes { get; set; }
 
     }
 }

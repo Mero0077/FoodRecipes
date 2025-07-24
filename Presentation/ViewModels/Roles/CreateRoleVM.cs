@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Presentation.ViewModels
+namespace Presentation.ViewModels.Roles
 {
     public class CreateRoleVM
     {
