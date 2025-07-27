@@ -32,7 +32,9 @@ namespace Application.CQRS.Account.Commands
         {
 
            var res= await _mediator.Send(new CheckIfUserNameAndPasswordMatchesQuery(request.LoginDTO));
-           var roles = await _UserRoleRepository.Get(e => e.UserId == res.Id).Select(e=>e.Role.Name).ToListAsync();
+           if (res != null) throw new UnauthorizedAccessException("Invalid Username or Pass!");
+
+            var roles = await _UserRoleRepository.Get(e => e.UserId == res.Id).Select(e=>e.Role.Name).ToListAsync();
            return _jwtTokenGenerator.Generate(res.Id,res.FirstName, roles);
            
 
