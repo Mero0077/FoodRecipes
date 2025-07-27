@@ -3,6 +3,7 @@ using Application.DTOs.User;
 using AutoMapper;
 using Domain.IRepositories;
 using Domain.Models;
+using Infrastructure.Helpers;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace Application.CQRS.Account.Commands
             var user = _mapper.Map<User>(request.UserRegisterDTO);
             string HashedPass = BCrypt.Net.BCrypt.HashPassword(user.Password);
             user.Password = HashedPass;
-
+            user.RoleId = new Guid(Constants.NoneRole);
            var res= await _generalRepository.AddAsync(user);
            await _generalRepository.SaveChangesAsync();
 

@@ -17,7 +17,10 @@ namespace Domain.Models
         public string Country { get; set; }
         public string UserName { get; set; }
 
-        public virtual ICollection<UserRole> userRoles { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; }
         public virtual WishList wishList { get; set; }
+
+        public virtual Role Role { get; set; }
+        public Guid RoleId { get; set; }
     }
 }

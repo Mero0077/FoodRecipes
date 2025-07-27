@@ -45,5 +45,12 @@ namespace Presentation.Controllers
             var result = await _mediator.Send(new DeleteRoleCommand(id));
             return ResponseViewModel<bool>.Success(result);
         }
+
+        [HttpPut]
+        public async Task<ResponseViewModel<bool>> UpdateRole([FromQuery] Guid id, [FromBody] UpdateRoleVM updateRoleVM)
+        {
+            var result = await _mediator.Send(new UpdateRoleCommand(id, updateRoleVM.Name));
+            return ResponseViewModel<bool>.Success(result);
+        }
     }
 }

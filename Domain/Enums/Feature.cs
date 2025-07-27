@@ -8,6 +8,9 @@ namespace Domain.Enums
 {
     public enum FeatureCode
     {
-
+        GetAllRoles,
+        DeleteRole,
+        UpdateRole,
+        CreateRole,
     }
 }

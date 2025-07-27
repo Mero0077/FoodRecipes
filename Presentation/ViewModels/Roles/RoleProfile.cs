@@ -15,6 +15,8 @@ namespace Presentation.ViewModels.Roles
             CreateMap<Role, GetAllRolesDTO>();
             CreateMap<GetAllRolesDTO, GetAllRolesVM>();
 
+            CreateMap<Role,GetRoleDTO>();
+
         }
     }
 }

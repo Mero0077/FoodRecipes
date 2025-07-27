@@ -12,5 +12,6 @@ namespace Application.Exceptions
         public ValidationException(string message, ErrorCodes ErrorCode, Exception innerException) : base(message, StatusCodes.Status400BadRequest, ErrorCode, innerException)
         {
         }
+
     }
 }

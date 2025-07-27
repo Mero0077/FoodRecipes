@@ -30,4 +30,4 @@ namespace Application.CQRS.Recipe.Queries
 
         }
     }
- }
+}
