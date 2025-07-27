@@ -42,6 +42,7 @@ namespace Infrastructure.AppDbContext
         public DbSet<WishList> wishLists { get; set; }
         public DbSet<WishListRecipe> WishListsRecipes { get;set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<HotRecipe> HotRecipes { get; set; }
 
     }
 }

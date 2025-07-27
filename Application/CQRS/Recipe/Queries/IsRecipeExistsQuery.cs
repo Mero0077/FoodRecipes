@@ -11,15 +11,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.CQRS.WishList.Queries
+namespace Application.CQRS.Recipe.Queries
 {
     public record IsRecipeExistsQuery(Guid RecipeId):IRequest<bool>;
 
     public class IsRecipeExistsQueryHandler : IRequestHandler<IsRecipeExistsQuery,bool>
     {
-        private IGeneralRepository<Recipe> _Reciperepository;
+        private IGeneralRepository<Domain.Models.Recipe> _Reciperepository;
 
-        public IsRecipeExistsQueryHandler(IGeneralRepository<Recipe> Reciperepository)
+        public IsRecipeExistsQueryHandler(IGeneralRepository<Domain.Models.Recipe> Reciperepository)
         {
             _Reciperepository = Reciperepository;
         }

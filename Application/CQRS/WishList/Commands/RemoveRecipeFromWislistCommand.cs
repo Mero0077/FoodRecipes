@@ -1,4 +1,5 @@
-﻿using Application.CQRS.WishList.Queries;
+﻿using Application.CQRS.Recipe.Queries;
+using Application.CQRS.WishList.Queries;
 using Application.DTOs.Recipes;
 using Application.Enums.ErrorCodes;
 using Application.Exceptions;

@@ -1,5 +1,7 @@
 ﻿
+using Application.CQRS.Recipe.Queries;
 using Application.CQRS.WishList.Commands;
+using Application.CQRS.WishList.Events;
 using Application.CQRS.WishList.Queries;
 using Application.DTOs.Recipes;
 using Application.Enums.ErrorCodes;
@@ -65,7 +67,7 @@ namespace Application.CQRS.WishList.Orchestrator
 
             await GeneralRepository.AddAsync(entity);
             await GeneralRepository.SaveChangesAsync();
-
+            await mediator.Publish(new AddHotRecipeToWishListEvent(request.wishListRecipeDTO.RecipeId));
 
             return entity;
         }

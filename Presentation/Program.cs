@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Presentation.Middlewares;
 using Presentation.Shared;
+using Presentation.ViewModels.Recipe;
 using Presentation.ViewModels.RecipeWishList;
 using Presentation.ViewModels.Roles;
 using Presentation.ViewModels.WishList;
@@ -101,7 +102,8 @@ namespace Presentation
                 typeof(UserProfile).Assembly,
                 typeof(RoleProfile).Assembly,
                 typeof(RecipeWisListProfile).Assembly,
-                typeof(WishListProfile).Assembly);
+                typeof(WishListProfile).Assembly,
+                typeof(RecipeProfile).Assembly);
 
            
             builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(IsWishListExistsQueryHandler).Assembly));
