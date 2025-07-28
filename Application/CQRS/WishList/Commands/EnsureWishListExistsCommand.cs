@@ -32,12 +32,9 @@ namespace Application.CQRS.WishList.Commands
             if (existingWishList!=null)
                 return existingWishList;
 
-            var userId = mediator.Send(new IsUserExistsQuery());
-            if(userId==null) throw new UnauthorizedAccessException("User ID not found in token");
-
             var newWishList = new Domain.Models.WishList
             {
-                UserId = userId.Result
+                UserId = Guid.Parse(ClaimTypes.NameIdentifier)
             };
 
             await wishListRepo.AddAsync(newWishList);

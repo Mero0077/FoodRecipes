@@ -31,7 +31,7 @@ namespace Application.CQRS.WishList.Commands
         public async Task<WishListRecipeDTO> Handle(RemoveRecipeFromWislistCommand request, CancellationToken cancellationToken)
         {
             var wishList = await mediator.Send(new IsWishListExistsQuery());
-            if (wishList == null) throw new BusinessLogicException("WishList not exists!", ErrorCodes.BusinessRuleViolation);
+            if (wishList == null) throw new NotFoundException("WishList not exists!", ErrorCodes.NotFound);
 
             if ( await mediator.Send(new IsRecipeExistsQuery(request.wishListRecipeDTO.RecipeId)))
             {
@@ -40,7 +40,7 @@ namespace Application.CQRS.WishList.Commands
             }
 
             var ToBeDeletedId= await GeneralRepository.Get(e=>e.WishListId==request.wishListRecipeDTO.WishListId && e.RecipeId==request.wishListRecipeDTO.RecipeId)
-                .Select(e=>e.Id).FirstOrDefaultAsync();
+                .Select(e=>e.Id).FirstOrDefaultAsync(); ///////////////////////
            var res=  await GeneralRepository.DeleteAsync(ToBeDeletedId);
            await GeneralRepository.SaveChangesAsync();
 

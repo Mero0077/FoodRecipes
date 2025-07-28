@@ -24,7 +24,6 @@ namespace Application.CQRS.Category.Command
 
         public async Task<RequestResult<bool>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            // Check if category already exists
             var existingCategory =await  _generalRepository.AnyAsync(c => c.Name == request.Name, cancellationToken);
 
             if(existingCategory == true)
@@ -34,14 +33,10 @@ namespace Application.CQRS.Category.Command
 
             var category = new Domain.Models.Category
             {
-                Id = Guid.NewGuid(),
                 Name = request.Name,
-                IsDeleted = false
             };
 
-            // Add the new category
             await _generalRepository.AddAsync(category);
-            // Save changes to the database
             await _generalRepository.SaveChangesAsync(cancellationToken);
 
             return RequestResult<bool>.Success(true, $"Category '{request.Name}' created successfully.");
