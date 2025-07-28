@@ -13,12 +13,10 @@ namespace Application.CQRS.Recipe.Event_Handlers
 {
     public class RecipeViewedEventHandler : INotificationHandler<RecipeViewedEvent>
     {
-        private readonly IHotRecipeRepository _repo;
         private readonly IMediator _mediator;
 
-        public RecipeViewedEventHandler(IHotRecipeRepository repo, IMediator mediator)
+        public RecipeViewedEventHandler( IMediator mediator)
         {
-            _repo = repo;
             _mediator = mediator;
         }
 
