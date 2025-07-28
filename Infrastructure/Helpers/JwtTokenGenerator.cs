@@ -30,7 +30,7 @@ namespace Infrastructure.Data
             var tokenHandler = new JwtSecurityTokenHandler();
             var claims = new List<Claim>
              {
-                new Claim("ID", userId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim(ClaimTypes.Role,role.Id.ToString()),
                 new Claim(ClaimTypes.Name, name),
              };

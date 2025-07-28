@@ -1,4 +1,5 @@
-﻿using Application.Views;
+﻿using Application.CQRS.Category.Query;
+using Application.Views;
 using Domain.IRepositories;
 using MediatR;
 using Microsoft.AspNetCore.Localization;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.Category.Command
 {
-    public record DeleteCategoryCommand(string id) : IRequest<RequestResult<bool>>;
+    public record DeleteCategoryCommand(Guid id) : IRequest<RequestResult<bool>>;
 
     public class DeleteCategoryHandler : IRequestHandler<DeleteCategoryCommand, RequestResult<bool>>
     {
@@ -24,18 +25,12 @@ namespace Application.CQRS.Category.Command
 
         public async Task<RequestResult<bool>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            // Check if category already exists
-            var id = Guid.TryParse(request.id, out var categoryId) ? categoryId : Guid.Empty;
-            var existingCategory = await _generalRepository.AnyAsync(c => c.Id == id);
 
-            if (existingCategory == false)
-            {
-               return RequestResult<bool>.Failure(ErrorCode.NotFound, "Category not found.");
-            }
+            var existingCategory = await _mediator.Send(new GetCategoryByIdQuery(request.id));
 
-            // Add the new category
-            await _generalRepository.DeleteAsync(id);
-            // Save changes to the database
+            if (existingCategory==null) return RequestResult<bool>.Failure(ErrorCode.NotFound, "Category not found.");
+
+            await _generalRepository.DeleteAsync(request.id);
             await _generalRepository.SaveChangesAsync(cancellationToken);
 
             return RequestResult<bool>.Success(true,"Deleted Succeffully.");

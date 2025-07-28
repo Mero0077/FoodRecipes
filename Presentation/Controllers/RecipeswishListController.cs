@@ -1,5 +1,5 @@
 ﻿using Application.CQRS.WishList.Commands;
-using Application.CQRS.WishList.Orchestrator;
+using Application.CQRS.WishList;
 using Application.DTOs.Recipes;
 using Application.Enums.ErrorCodes;
 using AutoMapper;

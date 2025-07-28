@@ -5,6 +5,6 @@ namespace Presentation.ViewModels.Category
     public class DeleteCategoryVM
     {
         [Required(ErrorMessage = "The ID is required.")]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

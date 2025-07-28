@@ -14,11 +14,9 @@ namespace Application.CQRS.WishList.Event_Handlers
 {
     public class AddHotRecipeToWishListEventHandler : INotificationHandler<AddHotRecipeToWishListEvent>
     {
-        private readonly IHotRecipeRepository _repo;
         private readonly IMediator _mediator;
-        public AddHotRecipeToWishListEventHandler(IHotRecipeRepository repo, IMediator mediator)
+        public AddHotRecipeToWishListEventHandler( IMediator mediator)
         {
-            _repo = repo;
             _mediator = mediator;
         }
 

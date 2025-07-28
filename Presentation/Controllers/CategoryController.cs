@@ -22,7 +22,6 @@ namespace Presentation.Controllers
             _mediator = mediator;
         }
 
-        // Example endpoint for getting all categories
         [HttpGet("GetAllCategories")]
         public async Task<EndpointResponse<List<CategoryDTO>>> Index()
         {
@@ -37,7 +36,6 @@ namespace Presentation.Controllers
                 return EndpointResponse<List<CategoryDTO>>.Failure(request.ErrorCode, request.Message);
             }
         }
-        // Example endpoint for creating a new category
         [HttpPost("CreateCategory")]
         public async Task<EndpointResponse<bool>> CreateCategory([FromBody] CreateCategoryVM command)
         {

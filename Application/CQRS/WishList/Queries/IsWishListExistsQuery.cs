@@ -31,8 +31,7 @@ namespace Application.CQRS.WishList.Queries
 
         public async Task<Domain.Models.WishList> Handle(IsWishListExistsQuery request, CancellationToken cancellationToken)
         {
-            var userId = await _mediator.Send(new IsUserExistsQuery());
-            var wishlist = await _wishListRepo.Get(e => e.UserId == userId).FirstOrDefaultAsync();
+            var wishlist = await _wishListRepo.GetOneWithTrackingAsync(e => e.UserId == Guid.Parse(ClaimTypes.NameIdentifier));
             return wishlist;
         }
     }
