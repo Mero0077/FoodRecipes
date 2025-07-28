@@ -33,6 +33,7 @@ namespace Application.CQRS.WishList.Commands
                 return existingWishList;
 
             var userId = mediator.Send(new IsUserExistsQuery());
+            if(userId==null) throw new UnauthorizedAccessException("User ID not found in token");
 
             var newWishList = new Domain.Models.WishList
             {

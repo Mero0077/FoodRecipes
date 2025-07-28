@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.WishList.Queries
 {
-    public record IsRecipeAlreadyAddedByUserQuery(IsRecipeAddedByUserDTO IsRecipeAddedByUserDTO):IRequest;
-    public class IsRecipeAlreadyAddedByUserQueryHandler : IRequestHandler<IsRecipeAlreadyAddedByUserQuery>
+    public record IsRecipeAlreadyAddedByUserQuery(IsRecipeAddedByUserDTO IsRecipeAddedByUserDTO):IRequest<bool>;
+    public class IsRecipeAlreadyAddedByUserQueryHandler : IRequestHandler<IsRecipeAlreadyAddedByUserQuery,bool>
     {
         private readonly IGeneralRepository<WishListRecipe> generalRepository;
 
@@ -22,10 +22,10 @@ namespace Application.CQRS.WishList.Queries
         {
             this.generalRepository = generalRepository;
         }
-        public async Task Handle(IsRecipeAlreadyAddedByUserQuery request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(IsRecipeAlreadyAddedByUserQuery request, CancellationToken cancellationToken)
         {
             var isrecipeadded = await generalRepository.AnyAsync(e => e.RecipeId == request.IsRecipeAddedByUserDTO.RecipeId && e.WishList.UserId == request.IsRecipeAddedByUserDTO.UserId);
-            if(isrecipeadded) throw new BusinessLogicException("Recipe already added!", ErrorCodes.AlreadyExist);
+            return isrecipeadded;
         }
     }
 

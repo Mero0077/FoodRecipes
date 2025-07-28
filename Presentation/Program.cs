@@ -1,8 +1,10 @@
 using Application.CQRS.Account.Commands;
 using Application.CQRS.Account.Queries;
 using Application.CQRS.Account.Shared;
+using Application.CQRS.logs;
 using Application.CQRS.WishList.Queries;
 using Application.DTOs.User;
+using Domain.Interfaces;
 using Domain.IRepositories;
 using Hangfire;
 using Infrastructure.AppDbContext;
@@ -12,13 +14,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Presentation.Controllers;
 using Presentation.Middlewares;
 using Presentation.Shared;
 using Presentation.ViewModels.Feature;
+using Presentation.ViewModels.Recipe;
 using Presentation.ViewModels.RecipeWishList;
 using Presentation.ViewModels.RoleFeature;
 using Presentation.ViewModels.Roles;
+using Presentation.ViewModels.WishList;
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -85,6 +88,13 @@ namespace Presentation
             });
             builder.Services.AddHttpContextAccessor();
 
+            //Test///////////////////////////////////////////////////////////////////
+            //builder.Services.AddTransient<IBackgroundLogger, BackgroundLogger>();
+            builder.Services.AddTransient<HangfireJobs>();
+
+
+            ////////////////////////////////////////////////////
+
             builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             builder.Services.AddScoped<GlobalExceptionHandlerMiddleware>();
             builder.Services.AddScoped(typeof(IGeneralRepository<>), typeof(GeneralRepository<>));
@@ -96,7 +106,8 @@ namespace Presentation
                 typeof(FeatureProfile).Assembly,
                 typeof(RoleFeatureProfile).Assembly,
                 typeof(RecipeWisListProfile).Assembly,
-                typeof(WishListProfile).Assembly);
+                typeof(WishListProfile).Assembly,
+                typeof(RecipeProfile).Assembly);
 
            
             builder.Services.AddMediatR(cfg =>cfg.RegisterServicesFromAssembly(typeof(IsWishListExistsQueryHandler).Assembly));
@@ -114,7 +125,8 @@ namespace Presentation
 
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
             app.UseAuthorization();
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/hangfire");
+            app.UseHangfireServer();
             app.MapControllers();
 
             app.Run();

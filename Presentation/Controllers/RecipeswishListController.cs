@@ -3,6 +3,7 @@ using Application.CQRS.WishList.Orchestrator;
 using Application.DTOs.Recipes;
 using Application.Enums.ErrorCodes;
 using AutoMapper;
+using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,7 @@ namespace Presentation.Controllers
             var res = await _mediator.Send(new AddRecipeToWishlistCommand(_mapper.Map<WishListRecipeDTO>(addRecipewishListVM)));
             if (res != null)
             {
+                BackgroundJob.Enqueue<HangfireJobs>(job => job.Log());
                 var mapped = _mapper.Map<AddRecipewishListVM>(res);
                 return new SuccessResponseVM<AddRecipewishListVM>(mapped, "Reciped added to wislist");
             }

@@ -23,7 +23,7 @@ namespace Application.CQRS.WishList.Queries
             try
             {
                 if (userIdClaim == null)
-                    throw new UnauthorizedAccessException("User ID not found in token");
+                    return null;
                 var userId = Guid.Parse(userIdClaim.Value);
 
                 return Task.FromResult(userId);

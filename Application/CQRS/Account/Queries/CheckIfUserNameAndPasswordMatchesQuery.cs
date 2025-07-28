@@ -27,8 +27,8 @@ namespace Application.CQRS.Account.Queries
         {
 
             var user = await _generalRepository.GetOneWithTrackingAsync(e => e.UserName == request.LoginDTO.UserName);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(request.LoginDTO.Password,user.Password))
-                throw new UnauthorizedAccessException("Invalid Username or Pass!");
+            if (user == null || !BCrypt.Net.BCrypt.Verify(request.LoginDTO.Password, user.Password))
+                return null;
 
             return user;
             

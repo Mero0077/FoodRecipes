@@ -1,5 +1,8 @@
-﻿using Application.CQRS.WishList.Queries;
+﻿using Application.CQRS.Recipe.Queries;
+using Application.CQRS.WishList.Queries;
 using Application.DTOs.Recipes;
+using Application.Enums.ErrorCodes;
+using Application.Exceptions;
 using AutoMapper;
 using Domain.IRepositories;
 using Domain.Models;
@@ -28,8 +31,13 @@ namespace Application.CQRS.WishList.Commands
         public async Task<WishListRecipeDTO> Handle(RemoveRecipeFromWislistCommand request, CancellationToken cancellationToken)
         {
             var wishList = await mediator.Send(new IsWishListExistsQuery());
+            if (wishList == null) throw new BusinessLogicException("WishList not exists!", ErrorCodes.BusinessRuleViolation);
 
-            await mediator.Send(new IsRecipeExistsQuery(request.wishListRecipeDTO.RecipeId));
+            if ( await mediator.Send(new IsRecipeExistsQuery(request.wishListRecipeDTO.RecipeId)))
+            {
+                throw new NotFoundException("Recipe not found!", ErrorCodes.NotFound);
+
+            }
 
             var ToBeDeletedId= await GeneralRepository.Get(e=>e.WishListId==request.wishListRecipeDTO.WishListId && e.RecipeId==request.wishListRecipeDTO.RecipeId)
                 .Select(e=>e.Id).FirstOrDefaultAsync();
