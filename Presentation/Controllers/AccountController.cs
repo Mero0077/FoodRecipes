@@ -2,6 +2,7 @@
 using Application.DTOs.User;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(UserRegisterVM userRegisterVM)
         {
             var res= await _mediator.Send(new RegisterUserCommand(_mapper.Map<UserRegisterDTO>(userRegisterVM)));
@@ -31,11 +33,13 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<string> Login(UserLoginVM userLoginVM)
         {
           return await _mediator.Send(new LoginCommand(_mapper.Map<LoginDTO>(userLoginVM)));
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> ForgetPass([FromQuery] string email)
         {
             if (string.IsNullOrWhiteSpace(email))

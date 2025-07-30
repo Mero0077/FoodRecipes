@@ -1,10 +1,12 @@
 ﻿using Application.CQRS.WishList.Commands;
 using Application.Enums.ErrorCodes;
 using AutoMapper;
+using Domain.Enums;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Filters;
 using Presentation.ViewModels.ErrorVM;
 using Presentation.ViewModels.WishList;
 using System.Security.Claims;
@@ -26,6 +28,7 @@ namespace Presentation.Controllers
 
         [HttpPost]
         [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.CreateWishList })]
         public async Task<ResponseVM<AddWishListVM>> Create()
         {
             var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

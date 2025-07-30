@@ -12,5 +12,16 @@ namespace Domain.Enums
         DeleteRole,
         UpdateRole,
         CreateRole,
+        AssignFeatureToRole,
+        GetAllCategories,
+        CreateCategory,
+        UpdateCategory,
+        DeleteCategory,
+        AddRecipe,
+        GetHotRecipe,
+        GetRecipe,
+        AddRecipeToWishlist,
+        RemoveRecipeFromWishlist,
+        CreateWishList,
     }
 }

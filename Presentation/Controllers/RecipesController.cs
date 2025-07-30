@@ -7,10 +7,13 @@ using Application.Enums.ErrorCodes;
 using Application.Exceptions;
 using Application.Views;
 using AutoMapper;
+using Domain.Enums;
 using Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Filters;
 using Presentation.ViewModels.ErrorVM;
 using Presentation.ViewModels.Recipe;
 using Presentation.ViewModels.WishList;
@@ -20,6 +23,7 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
+    [Authorize]
     public class RecipesController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -30,7 +34,11 @@ namespace Presentation.Controllers
             _mediator = mediator;
             this.mapper = mapper;
         }
+
         [HttpGet]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.GetRecipe })]
+
         public async Task<ResponseVM<RecipeVM>> GetRecipe([FromQuery] Guid id)
         {
             var res= await _mediator.Send(new GetRecipeQuery(id));
@@ -43,6 +51,9 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.GetHotRecipe })]
+
         public async Task<ResponseVM<List<RecipeVM>>> GetHotRecipes([FromQuery] int limit)
         {
 
@@ -54,6 +65,8 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.AddRecipe })]
         public async Task<ResponseVM<RecipeVM>> AddRecipe([FromBody]RecipeVM recipeVM)
         {
           var recipe= await _mediator.Send(new AddRecipeCommand(mapper.Map<AddRecipeDTO>(recipeVM)));
