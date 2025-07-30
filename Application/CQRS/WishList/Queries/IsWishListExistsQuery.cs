@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace Application.CQRS.WishList.Queries
 {
 
-    public record IsWishListExistsQuery() : IRequest<Domain.Models.WishList>;
+    public record IsWishListExistsQuery(Guid userId) : IRequest<Domain.Models.WishList>;
     public class IsWishListExistsQueryHandler : IRequestHandler<IsWishListExistsQuery, Domain.Models.WishList>
     {
         private readonly IGeneralRepository<Domain.Models.WishList> _wishListRepo;
@@ -31,7 +31,7 @@ namespace Application.CQRS.WishList.Queries
 
         public async Task<Domain.Models.WishList> Handle(IsWishListExistsQuery request, CancellationToken cancellationToken)
         {
-            var wishlist = await _wishListRepo.GetOneWithTrackingAsync(e => e.UserId == Guid.Parse(ClaimTypes.NameIdentifier));
+            var wishlist = await _wishListRepo.GetOneWithTrackingAsync(e => e.UserId == request.userId);
             return wishlist;
         }
     }

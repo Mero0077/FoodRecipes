@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RecipesController : ControllerBase
     {
@@ -30,7 +30,7 @@ namespace Presentation.Controllers
             _mediator = mediator;
             this.mapper = mapper;
         }
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<ResponseVM<RecipeVM>> GetRecipe([FromQuery] Guid id)
         {
             var res= await _mediator.Send(new GetRecipeQuery(id));
@@ -42,7 +42,7 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpGet("Hot")]
+        [HttpGet]
         public async Task<ResponseVM<List<RecipeVM>>> GetHotRecipes([FromQuery] int limit)
         {
 
@@ -54,7 +54,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseVM<RecipeVM>> AddRecipe(RecipeVM recipeVM)
+        public async Task<ResponseVM<RecipeVM>> AddRecipe([FromBody]RecipeVM recipeVM)
         {
           var recipe= await _mediator.Send(new AddRecipeCommand(mapper.Map<AddRecipeDTO>(recipeVM)));
             

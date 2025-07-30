@@ -1,7 +1,6 @@
 using Application.CQRS.Account.Commands;
 using Application.CQRS.Account.Queries;
 using Application.CQRS.Account.Shared;
-using Application.CQRS.logs;
 using Application.CQRS.WishList.Queries;
 using Application.DTOs.User;
 using Domain.Interfaces;
@@ -22,9 +21,11 @@ using Presentation.ViewModels.RecipeWishList;
 using Presentation.ViewModels.RoleFeature;
 using Presentation.ViewModels.Roles;
 using Presentation.ViewModels.WishList;
+using Scalar.AspNetCore;
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Security.Claims;
 using System.Text;
 
 namespace Presentation
@@ -84,6 +85,7 @@ namespace Presentation
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    NameClaimType = ClaimTypes.NameIdentifier
                 };
             });
             builder.Services.AddHttpContextAccessor();
@@ -117,13 +119,16 @@ namespace Presentation
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.MapScalarApiReference();
+                app.MapOpenApi();
+                //app.UseSwagger();
+                //app.UseSwaggerUI();
             }
 
             app.UseHttpsRedirection();
 
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseHangfireDashboard("/hangfire");
             app.UseHangfireServer();

@@ -10,7 +10,8 @@ namespace Presentation.ViewModels.RecipeWishList
         public RecipeWisListProfile()
         {
             CreateMap<AddRecipewishListVM, WishListRecipeDTO>().ReverseMap();
-            CreateMap<WishListRecipe, WishListRecipeDTO>();
+            CreateMap<WishListRecipeDTO, WishListRecipe>().ReverseMap();
+            CreateMap<WishListRecipe, AddRecipewishListVM>();
         }
     }
 }

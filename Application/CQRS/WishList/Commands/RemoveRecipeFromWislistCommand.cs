@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.WishList.Commands
 {
-    public record RemoveRecipeFromWislistCommand(WishListRecipeDTO wishListRecipeDTO):IRequest<WishListRecipeDTO>;
+    public record RemoveRecipeFromWislistCommand(Guid userId,WishListRecipeDTO wishListRecipeDTO):IRequest<WishListRecipeDTO>;
     public class RemoveRecipeFromWislistCommandHandler : IRequestHandler<RemoveRecipeFromWislistCommand, WishListRecipeDTO>
     {
         private IGeneralRepository<WishListRecipe> GeneralRepository { get; }
@@ -30,13 +30,12 @@ namespace Application.CQRS.WishList.Commands
         }
         public async Task<WishListRecipeDTO> Handle(RemoveRecipeFromWislistCommand request, CancellationToken cancellationToken)
         {
-            var wishList = await mediator.Send(new IsWishListExistsQuery());
+            var wishList = await mediator.Send(new IsWishListExistsQuery(request.userId));
             if (wishList == null) throw new NotFoundException("WishList not exists!", ErrorCodes.NotFound);
 
             if ( await mediator.Send(new IsRecipeExistsQuery(request.wishListRecipeDTO.RecipeId)))
             {
                 throw new NotFoundException("Recipe not found!", ErrorCodes.NotFound);
-
             }
 
             var ToBeDeletedId= await GeneralRepository.Get(e=>e.WishListId==request.wishListRecipeDTO.WishListId && e.RecipeId==request.wishListRecipeDTO.RecipeId)
