@@ -37,7 +37,6 @@ namespace Application.CQRS.WishList.Commands
             {
                 throw new NotFoundException("Recipe not found!", ErrorCodes.NotFound);
             }
-
             var ToBeDeletedId= await GeneralRepository.Get(e=>e.WishListId==request.wishListRecipeDTO.WishListId && e.RecipeId==request.wishListRecipeDTO.RecipeId)
                 .Select(e=>e.Id).FirstOrDefaultAsync(); ///////////////////////
            var res=  await GeneralRepository.DeleteAsync(ToBeDeletedId);

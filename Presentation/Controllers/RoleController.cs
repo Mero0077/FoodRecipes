@@ -2,9 +2,12 @@
 using Application.CQRS.Role.Queries;
 using Application.DTOs.Roles;
 using AutoMapper;
+using Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Filters;
 using Presentation.ViewModels;
 using Presentation.ViewModels.Roles;
 
@@ -24,6 +27,9 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.GetAllRoles })]
+
         public async Task<ResponseViewModel<IEnumerable<GetAllRolesVM>>> GetAllRoles()
         {
             var result = await _mediator.Send(new GetAllRolesQuery());
@@ -32,6 +38,9 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.CreateRole })]
+
         public async Task<ResponseViewModel<Guid>> CreateRole(CreateRoleVM createRoleVM)
         {
             var mapped = _mapper.Map<CreateRoleDTO>(createRoleVM);
@@ -40,6 +49,9 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.DeleteRole })]
+
         public async Task<ResponseViewModel<bool>> DeleteRole([FromQuery] Guid id)
         {
             var result = await _mediator.Send(new DeleteRoleCommand(id));
@@ -47,6 +59,9 @@ namespace Presentation.Controllers
         }
 
         [HttpPut]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.UpdateRole })]
+
         public async Task<ResponseViewModel<bool>> UpdateRole([FromQuery] Guid id, [FromBody] UpdateRoleVM updateRoleVM)
         {
             var result = await _mediator.Send(new UpdateRoleCommand(id, updateRoleVM.Name));

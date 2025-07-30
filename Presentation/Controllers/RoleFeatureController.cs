@@ -1,9 +1,12 @@
 ﻿using Application.CQRS.RoleFeature.Commands;
 using Application.DTOs.RoleFeature;
 using AutoMapper;
+using Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Filters;
 using Presentation.ViewModels;
 using Presentation.ViewModels.RoleFeature;
 
@@ -23,6 +26,9 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.AssignFeatureToRole })]
+
         public async Task <ResponseViewModel<bool>> AssignFeatureToRole([FromBody]AssignFeatureToRoleVM assignFeatureToRoleVM)
         {
             var mapped = _mapper.Map<AssignFeatureToRoleDTO>(assignFeatureToRoleVM);

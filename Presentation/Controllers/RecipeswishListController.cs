@@ -11,6 +11,9 @@ using Presentation.ViewModels.ErrorVM;
 using Presentation.ViewModels.RecipeWishList;
 using System.Security.Claims;
 using Presentation.ViewModels.WishList;
+using Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Presentation.Filters;
 
 namespace Presentation.Controllers
 {
@@ -26,6 +29,9 @@ namespace Presentation.Controllers
             _mapper = mapper;
         }
         [HttpPost]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.AddRecipeToWishlist })]
+
         public async Task<ResponseVM<AddRecipewishListVM>> AddRecipeTowishList([FromBody]AddRecipewishListVM addRecipewishListVM)
         {
             var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -41,6 +47,8 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.RemoveRecipeFromWishlist })]
         public async Task<ResponseVM<AddRecipewishListVM>> RemoveRecipeFromWishlist([FromBody] AddRecipewishListVM addRecipewishListVM)
         {
             var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

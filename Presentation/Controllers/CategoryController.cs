@@ -2,9 +2,13 @@
 using Application.CQRS.Category.Query;
 using Application.DTOs.Category;
 using Application.Views;
+using AutoMapper.Features;
+using Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Presentation.Filters;
 using Presentation.ViewModels;
 using Presentation.ViewModels.Category;
 using System.Collections.Generic;
@@ -23,6 +27,10 @@ namespace Presentation.Controllers
         }
 
         [HttpGet("GetAllCategories")]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.GetAllCategories })]
+
+
         public async Task<EndpointResponse<List<CategoryDTO>>> Index()
         {
             var request = await _mediator.Send(new GetAllCategoriesQuery());
@@ -37,6 +45,9 @@ namespace Presentation.Controllers
             }
         }
         [HttpPost("CreateCategory")]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.CreateCategory })]
+
         public async Task<EndpointResponse<bool>> CreateCategory([FromBody] CreateCategoryVM command)
         {
             if (!ModelState.IsValid)
@@ -55,6 +66,9 @@ namespace Presentation.Controllers
         }
 
         [HttpPatch("UpdateCategory/{id}")]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.UpdateCategory })]
+
         public async Task<EndpointResponse<bool>> UpdateCategory([FromRoute] Guid id,[FromBody] UpdateCategoryVM command)
         {
             if (!ModelState.IsValid)
@@ -72,6 +86,9 @@ namespace Presentation.Controllers
             }
         }
         [HttpDelete("DeleteCategory/{Id}")]
+        [Authorize]
+        [TypeFilter<CustomAuthorizeFilter>(Arguments = new object[] { FeatureCode.DeleteCategory })]
+
         public async Task<EndpointResponse<bool>> DeleteCategory([FromRoute] DeleteCategoryVM deleteCategoryVM)
         {
             if (!ModelState.IsValid)
