@@ -9,7 +9,7 @@ using Presentation.ViewModels.User;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace Presentation.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("Register")]
+        [HttpPost]
         public async Task<IActionResult> Register(UserRegisterVM userRegisterVM)
         {
             var res= await _mediator.Send(new RegisterUserCommand(_mapper.Map<UserRegisterDTO>(userRegisterVM)));
@@ -30,7 +30,7 @@ namespace Presentation.Controllers
             return Ok(_mapper.Map<UserRegisterVM>(res));
         }
 
-        [HttpPost("Login")]
+        [HttpPost]
         public async Task<string> Login(UserLoginVM userLoginVM)
         {
           return await _mediator.Send(new LoginCommand(_mapper.Map<LoginDTO>(userLoginVM)));

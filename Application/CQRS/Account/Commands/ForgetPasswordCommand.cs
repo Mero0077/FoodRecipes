@@ -30,7 +30,7 @@ namespace Application.CQRS.Account.Commands
         public async Task<bool> Handle(ForgetPasswordCommand request, CancellationToken cancellationToken)
         {
             var user = await _generalRepository.GetOneWithTrackingAsync(u => u.Email == request.Email);
-            if (user == null) return true;
+            if (user == null) return false;
 
             var otp = new Random().Next(100000, 999999).ToString();
 

@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.WishList.Commands
 {
-    public record AddRecipeToWishlistCommand(WishListRecipeDTO wishListRecipeDTO) : IRequest<WishListRecipe>;
+    public record AddRecipeToWishlistCommand(Guid userId,WishListRecipeDTO wishListRecipeDTO) : IRequest<WishListRecipe>;
     public class AddRecipeToWishlistCommandHandler : IRequestHandler<AddRecipeToWishlistCommand, WishListRecipe>
     {
         private IGeneralRepository<WishListRecipe> GeneralRepository { get; }
@@ -34,19 +34,18 @@ namespace Application.CQRS.WishList.Commands
         public async Task<WishListRecipe> Handle(AddRecipeToWishlistCommand request, CancellationToken cancellationToken)
         {
 
-            var wishList = await mediator.Send(new IsWishListExistsQuery());
-            if (wishList == null) throw new BusinessLogicException("WishList not exists!", ErrorCodes.BusinessRuleViolation);
+            var wishList = await mediator.Send(new IsWishListExistsQuery(request.userId));
+            if (wishList == null) throw new BusinessLogicException("WishList not exists!", ErrorCodes.NotFound);
 
             if (await mediator.Send(new IsRecipeExistsQuery(request.wishListRecipeDTO.RecipeId)))
             {
                 throw new NotFoundException("Recipe not found!", ErrorCodes.NotFound);
 
             }
-
             var dto = new IsRecipeAddedByUserDTO
             {
                 RecipeId = request.wishListRecipeDTO.RecipeId,
-                UserId = Guid.Parse(ClaimTypes.NameIdentifier)
+                UserId = request.userId,
             };
 
             if (await mediator.Send(new IsRecipeAlreadyAddedByUserQuery(dto)))

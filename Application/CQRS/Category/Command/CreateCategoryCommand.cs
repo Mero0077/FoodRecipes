@@ -24,7 +24,7 @@ namespace Application.CQRS.Category.Command
 
         public async Task<RequestResult<bool>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var existingCategory =await  _generalRepository.AnyAsync(c => c.Name == request.Name, cancellationToken);
+            var existingCategory =await  _generalRepository.AnyAsync(c => c.Name == request.Name && !c.IsDeleted, cancellationToken);
 
             if(existingCategory == true)
             {

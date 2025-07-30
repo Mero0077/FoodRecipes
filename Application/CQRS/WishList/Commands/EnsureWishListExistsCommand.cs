@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Application.CQRS.WishList.Commands
 {
-    public record EnsureWishListExistsCommand() : IRequest<Domain.Models.WishList>;
+    public record EnsureWishListExistsCommand(Guid userId) : IRequest<Domain.Models.WishList>;
 
     public class EnsureWishListExistsCommandHandler : IRequestHandler<EnsureWishListExistsCommand, Domain.Models.WishList>
     {
@@ -27,14 +27,14 @@ namespace Application.CQRS.WishList.Commands
 
         public async Task<Domain.Models.WishList> Handle(EnsureWishListExistsCommand request, CancellationToken cancellationToken)
         {
-            var existingWishList = await mediator.Send(new IsWishListExistsQuery());
+            var existingWishList = await mediator.Send(new IsWishListExistsQuery(request.userId));
 
             if (existingWishList!=null)
                 return existingWishList;
 
             var newWishList = new Domain.Models.WishList
             {
-                UserId = Guid.Parse(ClaimTypes.NameIdentifier)
+                UserId = request.userId
             };
 
             await wishListRepo.AddAsync(newWishList);

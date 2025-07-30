@@ -19,21 +19,19 @@ namespace Application.CQRS.Account.Commands
     {
         private readonly IMediator _mediator;
         private readonly IGeneralRepository<User> _userRepository;
-        private readonly IGeneralRepository<Domain.Models.UserRole> _UserRoleRepository;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         public LoginCommandHandler(IMediator mediator,IGeneralRepository<User> userRepository,IJwtTokenGenerator jwtTokenGenerator, IGeneralRepository<Domain.Models.UserRole> RoleRepository)
         {
             _mediator = mediator;
             _userRepository = userRepository;
             _jwtTokenGenerator = jwtTokenGenerator;
-            _UserRoleRepository = RoleRepository;
         }
         public async Task<string> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
            var res= await _mediator.Send(new CheckIfUserNameAndPasswordMatchesQuery(request.LoginDTO));
-            if (res != null) throw new UnauthorizedAccessException("Invalid Username or Pass!");
+            if (res == null) throw new UnauthorizedAccessException("Invalid Username or Pass!");
 
-           var role = await _UserRoleRepository.Get(e => e.UserId == res.Id).Select(e=>e.Role).FirstOrDefaultAsync();                
+           var role = await _userRepository.Get(e => e.Id == res.Id).Select(e=>e.Role).FirstOrDefaultAsync();                
            return _jwtTokenGenerator.Generate(res.Id,res.FirstName, role);
         
         }

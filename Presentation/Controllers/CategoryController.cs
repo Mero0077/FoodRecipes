@@ -54,14 +54,14 @@ namespace Presentation.Controllers
             }
         }
 
-        [HttpPost("UpdateCategory")]
-        public async Task<EndpointResponse<bool>> UpdateCategory([FromBody] UpdateCategoryVM command)
+        [HttpPatch("UpdateCategory/{id}")]
+        public async Task<EndpointResponse<bool>> UpdateCategory([FromRoute] Guid id,[FromBody] UpdateCategoryVM command)
         {
             if (!ModelState.IsValid)
             {
                 return EndpointResponse<bool>.Failure(ErrorCode.DataNotValide, "Invalid model state.");
             }
-            var request = await _mediator.Send(new UpdateCategoryCommand(command.Id, command.Name));
+            var request = await _mediator.Send(new UpdateCategoryCommand(id, command.Name));
             if (request.IsSuccess == true)
             {
                 return EndpointResponse<bool>.Success(request.Data, request.Message);
@@ -71,14 +71,14 @@ namespace Presentation.Controllers
                 return EndpointResponse<bool>.Failure(request.ErrorCode, request.Message);
             }
         }
-        [HttpPost("DeleteCategory")]
-        public async Task<EndpointResponse<bool>> DeleteCategory([FromBody] DeleteCategoryVM command)
+        [HttpDelete("DeleteCategory/{Id}")]
+        public async Task<EndpointResponse<bool>> DeleteCategory([FromRoute] DeleteCategoryVM deleteCategoryVM)
         {
             if (!ModelState.IsValid)
             {
                 return EndpointResponse<bool>.Failure(ErrorCode.DataNotValide, "Invalid model state.");
             }
-            var request = await _mediator.Send(new DeleteCategoryCommand(command.Id));
+            var request = await _mediator.Send(new DeleteCategoryCommand(deleteCategoryVM.Id));
             if (request.IsSuccess == true)
             {
                 return EndpointResponse<bool>.Success(request.Data, request.Message);

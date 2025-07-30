@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels.ErrorVM;
 using Presentation.ViewModels.RecipeWishList;
+using System.Security.Claims;
+using Presentation.ViewModels.WishList;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RecipeswishListController : ControllerBase
     {
@@ -23,10 +25,12 @@ namespace Presentation.Controllers
             _mediator = mediator;
             _mapper = mapper;
         }
-        [HttpPost("wishlist/recipes")]
+        [HttpPost]
         public async Task<ResponseVM<AddRecipewishListVM>> AddRecipeTowishList([FromBody]AddRecipewishListVM addRecipewishListVM)
         {
-            var res = await _mediator.Send(new AddRecipeToWishlistCommand(_mapper.Map<WishListRecipeDTO>(addRecipewishListVM)));
+            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!Guid.TryParse(userIdStr, out var userId)) return new FailureResponseVM<AddRecipewishListVM>(ErrorCodes.UnAuthorized);
+            var res = await _mediator.Send(new AddRecipeToWishlistCommand(userId,_mapper.Map<WishListRecipeDTO>(addRecipewishListVM)));
             if (res != null)
             {
                 BackgroundJob.Enqueue<HangfireJobs>(job => job.Log());
@@ -36,10 +40,12 @@ namespace Presentation.Controllers
             else return new FailureResponseVM<AddRecipewishListVM>(ErrorCodes.BusinessRuleViolation, "Recipe could not be added!");
         }
 
-        [HttpDelete("wishlist/recipes/{recipeId}")]
+        [HttpDelete]
         public async Task<ResponseVM<AddRecipewishListVM>> RemoveRecipeFromWishlist([FromBody] AddRecipewishListVM addRecipewishListVM)
         {
-            var res=  await _mediator.Send(new RemoveRecipeFromWislistCommand(_mapper.Map<WishListRecipeDTO>(addRecipewishListVM)));
+            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!Guid.TryParse(userIdStr, out var userId)) return new FailureResponseVM<AddRecipewishListVM>(ErrorCodes.UnAuthorized);
+            var res=  await _mediator.Send(new RemoveRecipeFromWislistCommand(userId,_mapper.Map<WishListRecipeDTO>(addRecipewishListVM)));
             if(res != null)
             {
                 var mapped = _mapper.Map<AddRecipewishListVM>(res);

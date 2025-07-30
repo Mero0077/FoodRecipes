@@ -6,7 +6,5 @@ namespace Presentation.ViewModels.Category
     {
         [Required(ErrorMessage ="The name is requried.")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "The id is required.")]
-        public Guid Id { get; set; }
     }
 }
