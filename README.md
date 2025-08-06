@@ -56,18 +56,7 @@ A scalable and secure backend system for managing food recipes — built with **
 
 ---
 
-## 🧱 Project Structure
-
-/src
-├── Domain
-│ └── Entities, Enums, Interfaces
-├── Application
-│ └── Commands, Queries, DTOs, Interfaces, Services
-├── Infrastructure
-│ └── EF DbContext, Repositories, Auth, Hashing
-└── Presentation (API)
-└── Controllers, Middleware, Validators
-
+<pre> ## 🧱 Project Structure ``` /src ├── Domain │ ├── Entities │ ├── Enums │ └── Interfaces ├── Application │ ├── Commands │ ├── Queries │ ├── DTOs │ ├── Interfaces │ └── Services ├── Infrastructure │ ├── EF DbContext │ ├── Repositories │ ├── Auth │ └── Hashing └── Presentation (API) ├── Controllers ├── Middleware └── Validators ``` </pre>
 
 ---
 
