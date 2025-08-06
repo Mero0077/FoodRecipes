@@ -100,7 +100,6 @@ A scalable and secure backend system for managing food recipes — built with **
 ✅ Trending Recipe Logic (in progress)  
 ✅ Wishlist & Like Features  
 ✅ Background Job Integration  
-⚙️ Coming Soon: Image upload, Advanced search, Multi-tenant support
 
 ---
 
