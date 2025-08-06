@@ -47,7 +47,7 @@ A scalable and secure backend system for managing food recipes — built with **
 
 | Layer          | Tech                                    |
 |----------------|-----------------------------------------|
-| Language       | C# (.NET 7+)                            |
+| Language       | C# (.NET 8+)                            |
 | Framework      | ASP.NET Core Web API                    |
 | Database       | SQL Server (via EF Core)                |
 | Auth & Hashing | JWT + Bcrypt                            |
